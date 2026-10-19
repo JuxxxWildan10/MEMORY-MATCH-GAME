@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Memory Match - Level, Mode & Tantangan Seru</title>
     <meta name="description" content="Game asah otak kartu memori interaktif dengan mode level berjenjang, mode tantangan, kombo skor, tema kartu, power-up, dan efek suara. Mainkan offline di desktop dan smartphone!">
     <meta name="theme-color" content="#2563eb">
@@ -40,7 +40,6 @@
         }
     </script>
     <script>
-        // Tailwind config untuk dark mode class
         if (window.tailwind) {
             tailwind.config = {
                 darkMode: 'class',
@@ -56,21 +55,28 @@
     </script>
 
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: 'Outfit', 'Inter', system-ui, sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         /* CSS 3D Card Flip */
         .card {
             perspective: 1000px;
+            aspect-ratio: 1 / 1;
+            width: 100%;
         }
 
         .card-inner {
             position: relative;
             width: 100%;
             height: 100%;
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
             transform-style: preserve-3d;
         }
 
@@ -87,61 +93,58 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 0.85rem;
+            border-radius: 0.75rem;
             user-select: none;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Skin Kartu Belakang (Default: Neon Blue) */
+        /* Skin Kartu Belakang: Default (Neon Blue) */
         .card-front {
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: white;
-            font-weight: 800;
-            font-size: 1.4rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.12), 0 2px 4px -2px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.12);
             border: 2px solid rgba(255, 255, 255, 0.25);
         }
 
-        /* Skin Kartu Cyberpunk */
+        /* Skin Cyberpunk */
         .skin-cyberpunk .card-front {
             background: linear-gradient(135deg, #7c3aed, #db2777);
             border-color: rgba(244, 114, 182, 0.4);
-            box-shadow: 0 0 15px rgba(219, 39, 119, 0.3);
+            box-shadow: 0 0 10px rgba(219, 39, 119, 0.25);
         }
 
-        /* Skin Kartu Emerald */
+        /* Skin Emerald */
         .skin-emerald .card-front {
             background: linear-gradient(135deg, #059669, #0d9488);
             border-color: rgba(52, 211, 153, 0.4);
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
         }
 
-        /* Skin Kartu Sunset */
+        /* Skin Sunset */
         .skin-sunset .card-front {
             background: linear-gradient(135deg, #e11d48, #d97706);
             border-color: rgba(251, 191, 36, 0.4);
-            box-shadow: 0 0 15px rgba(225, 29, 72, 0.25);
+            box-shadow: 0 0 10px rgba(225, 29, 72, 0.25);
         }
 
-        /* Skin Kartu Obsidian Dark */
+        /* Skin Obsidian */
         .skin-obsidian .card-front {
             background: linear-gradient(135deg, #1e293b, #0f172a);
             border-color: rgba(234, 179, 8, 0.5);
-            box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
+            box-shadow: 0 0 10px rgba(234, 179, 8, 0.2);
             color: #facc15;
         }
 
         .card:hover:not(.flipped):not(.matched) .card-front {
-            transform: translateY(-2px) scale(1.02);
-            filter: brightness(1.1);
+            filter: brightness(1.08);
         }
 
-        /* Tampilan depan kartu (terbuka / emoji) */
+        /* Tampilan Depan Kartu (Terbuka / Emoji) */
         .card-back {
             background-color: #ffffff;
             border: 2px solid #60a5fa;
             transform: rotateY(180deg);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.08);
         }
 
         .dark .card-back {
@@ -150,20 +153,20 @@
             color: #f8fafc;
         }
 
-        /* Kartu cocok */
+        /* Kartu Cocok */
         .card.matched .card-back {
             border-color: #10b981;
             background-color: #ecfdf5;
-            box-shadow: 0 0 14px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
         }
 
         .dark .card.matched .card-back {
             border-color: #10b981;
             background-color: #064e3b;
-            box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
         }
 
-        /* Highlight Hint Kartu */
+        /* Hint Glow */
         .card.hint-glow .card-front {
             animation: pulseHint 0.8s infinite alternate;
             border-color: #fbbf24 !important;
@@ -171,48 +174,48 @@
 
         @keyframes pulseHint {
             0% { transform: scale(1); box-shadow: 0 0 8px #f59e0b; }
-            100% { transform: scale(1.06); box-shadow: 0 0 20px #fbbf24; }
+            100% { transform: scale(1.05); box-shadow: 0 0 18px #fbbf24; }
         }
 
-        /* Animasi getar salah tebak */
+        /* Shake Mismatch */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-5px); }
-            40%, 80% { transform: translateX(5px); }
+            20%, 60% { transform: translateX(-4px); }
+            40%, 80% { transform: translateX(4px); }
         }
         .card.shake {
-            animation: shake 0.4s ease-in-out;
+            animation: shake 0.35s ease-in-out;
         }
 
-        /* Float Up Animasi Penalti */
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-22px); }
-        }
-        .penalty-anim {
-            animation: floatUp 0.8s ease-out forwards;
-        }
-
-        /* Float Up Animasi Skor Tambahan */
+        /* Floating Score Pop */
         @keyframes scorePop {
-            0% { opacity: 0; transform: translateY(12px) scale(0.8); }
-            25% { opacity: 1; transform: translateY(-4px) scale(1.15); }
-            80% { opacity: 1; transform: translateY(-16px) scale(1); }
-            100% { opacity: 0; transform: translateY(-26px) scale(0.9); }
+            0% { opacity: 0; transform: translateY(8px) scale(0.85); }
+            30% { opacity: 1; transform: translateY(-3px) scale(1.1); }
+            80% { opacity: 1; transform: translateY(-12px) scale(1); }
+            100% { opacity: 0; transform: translateY(-20px) scale(0.9); }
         }
         .score-pop-anim {
-            animation: scorePop 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: scorePop 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Timer Frosty (Beku) */
+        /* Floating Penalty */
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-18px); }
+        }
+        .penalty-anim {
+            animation: floatUp 0.75s ease-out forwards;
+        }
+
+        /* Timer Frosty */
         .timer-frosty {
             color: #06b6d4 !important;
-            text-shadow: 0 0 10px rgba(6, 182, 212, 0.8);
+            text-shadow: 0 0 8px rgba(6, 182, 212, 0.8);
             animation: frostyPulse 1s infinite alternate;
         }
         @keyframes frostyPulse {
             0% { transform: scale(1); }
-            100% { transform: scale(1.08); }
+            100% { transform: scale(1.06); }
         }
 
         /* Canvas Confetti */
@@ -225,348 +228,277 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950 text-slate-800 dark:text-slate-100 min-h-screen flex items-center justify-center p-2.5 sm:p-6 transition-colors duration-300">
+<body class="bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950 text-slate-800 dark:text-slate-100 min-h-screen flex items-center justify-center p-2 sm:p-4 transition-colors duration-300">
 
-    <!-- Canvas Confetti untuk Perayaan Kemenangan -->
+    <!-- Canvas Confetti -->
     <canvas id="confetti-canvas"></canvas>
 
-    <!-- Container Utama -->
-    <div id="main-container" class="bg-white/95 dark:bg-slate-900/90 backdrop-blur-md p-4 sm:p-7 rounded-3xl shadow-2xl w-full max-w-xl border border-white/80 dark:border-slate-800 transition-all duration-300 relative">
+    <!-- Container Utama Game -->
+    <div id="main-container" class="bg-white/95 dark:bg-slate-900/90 backdrop-blur-md p-3 sm:p-5 rounded-2xl sm:rounded-3xl shadow-xl w-full max-w-md sm:max-w-lg border border-white/80 dark:border-slate-800 transition-all duration-300 relative my-auto">
 
-        <!-- PWA Top Action & Status Bar -->
-        <div class="flex items-center justify-between gap-2 mb-3">
-            <!-- Offline / Online Indicator -->
-            <div id="connection-status" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 transition-all">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span id="connection-text">Online</span>
+        <!-- Top Header & Toolbar (Ringkas & Efisien) -->
+        <div class="flex items-center justify-between gap-1 mb-2">
+            <!-- Logo & Status -->
+            <div class="flex items-center gap-1.5 shrink-0">
+                <span class="text-lg sm:text-xl">🧠</span>
+                <span class="font-extrabold text-sm sm:text-base text-slate-800 dark:text-white tracking-tight">Memory Match</span>
+                <!-- Online/Offline Pill -->
+                <span id="connection-status" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span id="connection-text">Online</span>
+                </span>
             </div>
 
-            <div class="flex items-center gap-1.5 sm:gap-2">
-                <!-- Standalone App Mode Badge -->
-                <div id="pwa-standalone-badge" class="hidden items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 dark:bg-blue-900/40 dark:text-blue-300 px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-700">
-                    <span>⚡</span> Mode Aplikasi
+            <!-- Toolbar Buttons -->
+            <div class="flex items-center gap-1 shrink-0">
+                <!-- PWA Install Button -->
+                <button id="pwa-install-btn" class="hidden items-center gap-1 px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[10px] font-bold shadow-sm active:scale-95 transition">
+                    <span>📲</span> Pasang
+                </button>
+                <div id="pwa-standalone-badge" class="hidden items-center gap-0.5 text-[9px] font-bold text-blue-700 bg-blue-50 dark:bg-blue-900/40 dark:text-blue-300 px-1.5 py-0.5 rounded-lg border border-blue-200 dark:border-blue-700">
+                    <span>⚡</span> App
                 </div>
 
-                <!-- Tombol Install PWA -->
-                <button id="pwa-install-btn" class="hidden items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full text-xs font-bold shadow-md shadow-blue-200 dark:shadow-none active:scale-95 transition-all">
-                    <span>📲</span>
-                    <span id="pwa-install-text">Pasang Aplikasi</span>
-                </button>
-
-                <!-- Tombol Dark Mode Toggle -->
-                <button id="darkmode-toggle-btn" title="Ganti Tema Terang/Gelap" class="p-1.5 sm:p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-amber-300 text-xs transition active:scale-95 font-bold">
+                <!-- Dark Mode -->
+                <button id="darkmode-toggle-btn" title="Mode Gelap / Terang" class="p-1 sm:p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-amber-300 text-xs transition active:scale-95 font-bold">
                     🌙
                 </button>
+                <!-- Themes / Skins -->
+                <button id="themes-btn" title="Skin & Tema Kartu" class="p-1 sm:p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs transition active:scale-95">
+                    🎨
+                </button>
+                <!-- Achievements -->
+                <button id="achievements-btn" title="Pencapaian & Trofi" class="p-1 sm:p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs transition active:scale-95 font-bold">
+                    🎖️
+                </button>
+                <!-- Leaderboard -->
+                <button id="leaderboard-btn" title="Papan Rekor" class="p-1 sm:p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs transition active:scale-95 font-bold">
+                    📊
+                </button>
+                <!-- Sound FX -->
+                <button id="sound-btn" title="Efek Suara" class="p-1 sm:p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs transition active:scale-95">
+                    🔊
+                </button>
+                <!-- BGM Music -->
+                <button id="bgm-btn" title="Musik Ambient" class="p-1 sm:p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs transition active:scale-95">
+                    🎵
+                </button>
             </div>
         </div>
 
-        <!-- PWA Install Banner Card -->
-        <div id="pwa-banner" class="hidden mb-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white p-3 sm:p-3.5 rounded-2xl shadow-lg relative overflow-hidden">
-            <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-2.5">
-                    <img src="icons/icon-192.png" alt="Icon" class="w-10 h-10 rounded-xl shadow-md border border-white/20 shrink-0">
-                    <div>
-                        <div class="text-xs sm:text-sm font-extrabold flex items-center gap-1.5">
-                            Pasang Memory Match
-                            <span class="text-[10px] bg-white/20 px-1.5 py-0.5 rounded-full font-bold">PWA</span>
-                        </div>
-                        <p class="text-[11px] text-blue-100 leading-tight mt-0.5">Mainkan langsung dari layar beranda & desktop tanpa kuota!</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-1.5 shrink-0">
-                    <button id="pwa-banner-install-btn" class="px-3 py-1.5 bg-white text-blue-700 hover:bg-blue-50 text-xs font-extrabold rounded-xl shadow transition active:scale-95">
-                        Pasang
-                    </button>
-                    <button id="pwa-banner-close-btn" class="p-1 text-white/80 hover:text-white text-sm" aria-label="Tutup">
-                        ✕
-                    </button>
-                </div>
+        <!-- PWA Dismissible Strip Banner (Sangat Ramping) -->
+        <div id="pwa-banner" class="hidden mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-2.5 py-1.5 rounded-xl shadow text-xs flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5 truncate">
+                <span>📲</span>
+                <span class="truncate font-medium text-[11px]">Pasang game ini di layar utama HP Anda!</span>
             </div>
-        </div>
-
-        <!-- Header & Judul Game -->
-        <div class="text-center mb-4">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full text-xs font-bold mb-1.5">
-                <span>🧠</span> Game Asah Memori & Refleks
+            <div class="flex items-center gap-1 shrink-0">
+                <button id="pwa-banner-install-btn" class="px-2 py-0.5 bg-white text-blue-700 font-bold rounded-lg text-[10px] active:scale-95">
+                    Pasang
+                </button>
+                <button id="pwa-banner-close-btn" class="p-0.5 text-white/80 hover:text-white text-xs" aria-label="Tutup">
+                    ✕
+                </button>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-white tracking-tight">Memory Match</h1>
-            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">Cari pasangan kartu, kumpulkan skor combo, dan jadilah Grandmaster!</p>
         </div>
 
         <!-- Mode Switcher Tabs (3 Mode: Level, Challenge, Custom) -->
-        <div class="grid grid-cols-3 bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl mb-4 text-xs sm:text-sm font-bold gap-1">
-            <button id="tab-level" class="py-2 rounded-xl transition-all flex items-center justify-center gap-1 bg-blue-600 text-white shadow-md">
+        <div class="grid grid-cols-3 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl mb-2 text-xs font-bold gap-0.5">
+            <button id="tab-level" class="py-1 rounded-lg transition-all flex items-center justify-center gap-1 bg-blue-600 text-white shadow-sm">
                 <span>🏆</span> Level
             </button>
-            <button id="tab-challenge" class="py-2 rounded-xl transition-all flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button id="tab-challenge" class="py-1 rounded-lg transition-all flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <span>🔥</span> Challenge
             </button>
-            <button id="tab-custom" class="py-2 rounded-xl transition-all flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button id="tab-custom" class="py-1 rounded-lg transition-all flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <span>🎲</span> Kustom
             </button>
         </div>
 
         <!-- Section Level Selector (Aktif di Mode Level) -->
-        <div id="level-nav-container" class="mb-4">
-            <div class="flex justify-between items-center mb-2">
-                <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Pilih Level:</span>
-                <span id="level-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">
-                    Level 1 - Pemanasan
-                </span>
-            </div>
-            <div id="level-buttons" class="grid grid-cols-5 gap-1.5 sm:gap-2">
-                <!-- Tombol Level di-generate via JavaScript -->
+        <div id="level-nav-container" class="mb-2">
+            <div id="level-buttons" class="grid grid-cols-5 gap-1">
+                <!-- Di-generate via JS -->
             </div>
         </div>
 
         <!-- Section Challenge Selector (Aktif di Mode Challenge) -->
-        <div id="challenge-nav-container" class="mb-4 hidden">
-            <div class="flex justify-between items-center mb-2">
-                <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Pilih Tantangan:</span>
-                <span id="challenge-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300">
-                    ⚡ Time Rush
-                </span>
-            </div>
-            <div id="challenge-buttons" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                <!-- Tombol Tantangan di-generate via JavaScript -->
+        <div id="challenge-nav-container" class="mb-2 hidden">
+            <div id="challenge-buttons" class="grid grid-cols-4 gap-1">
+                <!-- Di-generate via JS -->
             </div>
         </div>
 
         <!-- Section Custom Sandbox Selector (Aktif di Mode Kustom) -->
-        <div id="custom-nav-container" class="mb-4 hidden bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2.5 text-xs">
-            <div class="flex justify-between items-center">
-                <span class="font-bold text-slate-700 dark:text-slate-200">Pengaturan Permainan Bebas</span>
-                <span class="text-[10px] bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 px-2 py-0.5 rounded-full font-bold">Sandbox</span>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
+        <div id="custom-nav-container" class="mb-2 hidden bg-slate-50 dark:bg-slate-800/60 p-2 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5 text-xs">
+            <div class="grid grid-cols-3 gap-1.5">
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Ukuran Kotak:</label>
-                    <select id="custom-grid-select" class="w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl p-1.5 font-bold text-xs">
-                        <option value="6">2 x 3 (6 Kartu)</option>
-                        <option value="8">2 x 4 (8 Kartu)</option>
-                        <option value="12" selected>3 x 4 (12 Kartu)</option>
-                        <option value="16">4 x 4 (16 Kartu)</option>
-                        <option value="20">4 x 5 (20 Kartu)</option>
+                    <label class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-0.5">Ukuran:</label>
+                    <select id="custom-grid-select" class="w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-1 font-bold text-[11px]">
+                        <option value="6">2 x 3 (6)</option>
+                        <option value="8">2 x 4 (8)</option>
+                        <option value="12" selected>3 x 4 (12)</option>
+                        <option value="16">4 x 4 (16)</option>
+                        <option value="20">4 x 5 (20)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Tema Gambar:</label>
-                    <select id="custom-theme-select" class="w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl p-1.5 font-bold text-xs">
-                        <option value="food">🍕 Kuliner</option>
-                        <option value="space">🚀 Luar Angkasa</option>
-                        <option value="animals">🐾 Hewan Lucu</option>
-                        <option value="gaming" selected>🎮 Video Game</option>
-                        <option value="nature">🌸 Alam & Bunga</option>
+                    <label class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-0.5">Tema:</label>
+                    <select id="custom-theme-select" class="w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-1 font-bold text-[11px]">
+                        <option value="food">🍕 Makanan</option>
+                        <option value="space">🚀 Galaxy</option>
+                        <option value="animals">🐾 Hewan</option>
+                        <option value="gaming" selected>🎮 Game</option>
+                        <option value="nature">🌸 Alam</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Batas Waktu:</label>
-                    <select id="custom-time-select" class="w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl p-1.5 font-bold text-xs">
-                        <option value="0">Santai (Bebas)</option>
-                        <option value="20">20 Detik</option>
-                        <option value="40" selected>40 Detik</option>
-                        <option value="60">60 Detik</option>
+                    <label class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-0.5">Waktu:</label>
+                    <select id="custom-time-select" class="w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-1 font-bold text-[11px]">
+                        <option value="0">Santai (∞)</option>
+                        <option value="20">20s</option>
+                        <option value="40" selected>40s</option>
+                        <option value="60">60s</option>
                     </select>
                 </div>
             </div>
-            <button id="custom-start-btn" class="w-full py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold rounded-xl shadow transition active:scale-95">
-                Terapkan & Mainkan Kustom ➔
+            <button id="custom-start-btn" class="w-full py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold rounded-lg shadow text-xs transition active:scale-95">
+                Mulai Kustom ➔
             </button>
         </div>
 
-        <!-- Deskripsi Aturan Level / Challenge yang Aktif & Info Skor -->
-        <div id="mode-desc-box" class="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl p-3 mb-3 text-xs text-slate-600 dark:text-slate-300">
-            <div class="flex items-center justify-between mb-1.5">
-                <div class="flex items-center gap-2">
-                    <span id="desc-icon" class="text-base">ℹ️</span>
-                    <span id="mode-description" class="font-medium">6 Kartu • 30 Detik • Temukan 3 pasang gambar!</span>
-                </div>
-                <span id="rule-tag" class="hidden text-[11px] font-bold px-2 py-0.5 rounded-md bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 shrink-0">
-                    Khusus
-                </span>
+        <!-- Mode Info Bar (1 Baris Ramping) -->
+        <div id="mode-desc-box" class="flex items-center justify-between gap-1.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/70 rounded-xl px-2.5 py-1 mb-2 text-[11px] text-slate-600 dark:text-slate-300">
+            <div class="flex items-center gap-1 truncate font-medium">
+                <span id="desc-icon" class="text-xs">🏆</span>
+                <span id="mode-description" class="truncate">6 Kartu • 30s • 3 Pasang</span>
             </div>
-            <!-- Info Rekor & Target Skor Mode Aktif -->
-            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400 pt-1.5 border-t border-slate-200/70 dark:border-slate-700/60">
-                <span class="text-amber-700 dark:text-amber-400 font-bold flex items-center gap-1">
-                    <span>🏆</span> Rekor Mode Ini: <span id="desc-high-score" class="text-slate-800 dark:text-white">0</span>
-                </span>
-                <span class="text-blue-700 dark:text-blue-400 font-semibold flex items-center gap-1">
-                    <span>🎯</span> Target Skor: <span id="desc-target-score">1.000</span>
-                </span>
-                <span class="text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1">
-                    <span>⚡</span> Multiplier: <span id="desc-multiplier">x1.0</span>
-                </span>
+            <div class="flex items-center gap-2 shrink-0 font-bold">
+                <span class="text-amber-700 dark:text-amber-400">🏆 <span id="desc-high-score">0</span></span>
+                <span class="text-blue-700 dark:text-blue-400">🎯 <span id="desc-target-score">900</span></span>
+                <span id="rule-tag" class="hidden text-[9px] px-1.5 py-0.2 rounded-md bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300">Khusus</span>
             </div>
         </div>
 
-        <!-- Panel Skor & HUD Modern -->
-        <div class="bg-slate-50 dark:bg-slate-800/80 rounded-2xl mb-3 border border-slate-200 dark:border-slate-700 p-3 sm:p-3.5 space-y-2.5 text-xs sm:text-sm font-semibold relative">
-            <!-- Baris 1: Skor Utama, Rekor, Audio, Musik & Tools -->
-            <div class="flex justify-between items-center pb-2 border-b border-slate-200/80 dark:border-slate-700/70">
+        <!-- Unified HUD Dashboard (1 Baris Ringkas & Berkelanjutan) -->
+        <div class="bg-slate-50 dark:bg-slate-800/80 rounded-xl mb-2 border border-slate-200 dark:border-slate-700 p-2 space-y-1.5 text-xs font-semibold relative">
+            <div class="flex items-center justify-between gap-1 text-[11px] sm:text-xs">
                 <!-- Skor & Combo Indicator -->
-                <div class="flex items-center gap-2 relative">
+                <div class="flex items-center gap-1 relative shrink-0">
                     <span class="text-slate-500 dark:text-slate-400 font-medium">Skor:</span>
-                    <span id="score" class="text-amber-500 dark:text-amber-400 font-extrabold text-lg sm:text-xl tracking-tight">0</span>
-                    <span id="combo-badge" class="hidden text-[10px] font-black px-1.5 py-0.5 rounded-md bg-amber-500 text-white animate-pulse">
-                        COMBO x2!
-                    </span>
-                    <!-- Floating Score Popup -->
-                    <div id="score-popup" class="absolute -top-4 left-14 text-xs font-black text-amber-600 dark:text-amber-400 pointer-events-none opacity-0 whitespace-nowrap">
-                        +100
-                    </div>
+                    <span id="score" class="text-amber-500 dark:text-amber-400 font-extrabold text-sm sm:text-base">0</span>
+                    <span id="combo-badge" class="hidden text-[9px] font-black px-1 py-0.2 rounded bg-amber-500 text-white animate-pulse">x2!</span>
+                    <div id="score-popup" class="absolute -top-3.5 left-10 text-[10px] font-black text-amber-600 dark:text-amber-400 pointer-events-none opacity-0 whitespace-nowrap">+100</div>
                 </div>
 
-                <!-- Tools & Modals Toolbar -->
-                <div class="flex items-center gap-1.5 sm:gap-2">
-                    <div class="flex items-center gap-1 text-slate-600 dark:text-slate-300 text-xs bg-amber-50 dark:bg-amber-950/40 px-2 py-1 rounded-lg border border-amber-200 dark:border-amber-800/50">
-                        <span>👑</span>
-                        <span id="high-score" class="text-amber-800 dark:text-amber-300 font-extrabold">0</span>
-                    </div>
-
-                    <!-- Tombol Pencapaian / Achievements -->
-                    <button id="achievements-btn" title="Pencapaian & Medali" class="p-1.5 sm:p-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl text-xs transition font-bold active:scale-95">
-                        🎖️
-                    </button>
-
-                    <!-- Tombol Papan Rekor -->
-                    <button id="leaderboard-btn" title="Papan Rekor Semua Mode" class="p-1.5 sm:p-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl text-xs transition font-bold active:scale-95">
-                        📊
-                    </button>
-
-                    <!-- Tombol Pilihan Tema / Skin Kartu -->
-                    <button id="themes-btn" title="Ganti Skin & Tema Kartu" class="p-1.5 sm:p-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl text-xs transition font-bold active:scale-95">
-                        🎨
-                    </button>
-
-                    <!-- Tombol Musik Lofi Ambient -->
-                    <button id="bgm-btn" title="Musik Relaksasi Ambient (BGM)" class="p-1.5 sm:p-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl text-xs transition active:scale-95">
-                        🎵
-                    </button>
-
-                    <!-- Tombol Toggle Suara FX -->
-                    <button id="sound-btn" title="Efek Suara" class="p-1.5 sm:p-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl text-xs transition active:scale-95">
-                        🔊
-                    </button>
-
-                    <!-- Tombol Reset -->
-                    <button id="reset-btn" class="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 active:scale-95 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition">
-                        Reset
-                    </button>
-                </div>
-            </div>
-
-            <!-- Baris 2: Langkah, Pasangan, Waktu & Progress Bar -->
-            <div class="flex justify-between items-center pt-0.5">
                 <!-- Langkah -->
-                <div class="text-slate-700 dark:text-slate-200 flex items-center gap-1">
+                <div class="flex items-center gap-1 shrink-0">
                     <span class="text-slate-500 dark:text-slate-400">Langkah:</span>
-                    <span id="moves" class="text-blue-600 dark:text-blue-400 font-bold text-base">0</span>
-                    <span id="moves-limit" class="text-slate-400 text-xs hidden">/ 10</span>
+                    <span id="moves" class="text-blue-600 dark:text-blue-400 font-bold">0</span>
+                    <span id="moves-limit" class="text-slate-400 text-[10px] hidden">/10</span>
                 </div>
 
-                <!-- Pasangan Cocok -->
-                <div class="text-slate-700 dark:text-slate-200 flex items-center gap-1">
-                    <span class="text-slate-500 dark:text-slate-400">Pasangan:</span>
-                    <span id="pairs-info" class="text-emerald-600 dark:text-emerald-400 font-bold text-base">0/3</span>
+                <!-- Pasangan -->
+                <div class="flex items-center gap-1 shrink-0">
+                    <span class="text-slate-500 dark:text-slate-400">Pasang:</span>
+                    <span id="pairs-info" class="text-emerald-600 dark:text-emerald-400 font-bold">0/3</span>
                 </div>
 
-                <!-- Waktu & Penalti Bubble -->
-                <div class="text-slate-700 dark:text-slate-200 flex items-center gap-1 relative">
-                    <span class="text-slate-500 dark:text-slate-400">Waktu:</span>
-                    <span id="timer" class="text-amber-600 dark:text-amber-400 font-bold text-base min-w-[36px] text-right">30s</span>
-                    <div id="penalty-bubble" class="absolute -top-4 right-0 text-xs font-bold text-rose-600 opacity-0 pointer-events-none whitespace-nowrap">
-                        -3s!
+                <!-- Waktu & Tombol Reset -->
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <div class="flex items-center gap-1 relative">
+                        <span class="text-slate-500 dark:text-slate-400">Waktu:</span>
+                        <span id="timer" class="text-amber-600 dark:text-amber-400 font-bold min-w-[26px] text-right">30s</span>
+                        <div id="penalty-bubble" class="absolute -top-3.5 right-0 text-[10px] font-bold text-rose-600 opacity-0 pointer-events-none whitespace-nowrap">-3s!</div>
                     </div>
+                    <button id="reset-btn" title="Mulai Ulang" class="p-1 px-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-bold transition active:scale-95">
+                        🔄
+                    </button>
                 </div>
             </div>
 
             <!-- Timer Progress Bar -->
-            <div id="timer-bar-container" class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+            <div class="w-full bg-slate-200 dark:bg-slate-700 h-1 rounded-full overflow-hidden">
                 <div id="timer-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-300" style="width: 100%;"></div>
             </div>
         </div>
 
-        <!-- Power-Up Bar (Bantuan / Booster Game) -->
-        <div id="powerup-bar" class="flex items-center justify-between gap-2 mb-3 bg-gradient-to-r from-slate-50 to-blue-50/70 dark:from-slate-800/80 dark:to-slate-800/40 p-2 sm:p-2.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/70 text-xs">
-            <span class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 pl-1 flex items-center gap-1">
+        <!-- Power-Up Bar (Bantuan Booster Ringkas) -->
+        <div id="powerup-bar" class="flex items-center justify-between gap-1 mb-2 bg-gradient-to-r from-slate-50 to-blue-50/70 dark:from-slate-800/80 dark:to-slate-800/40 px-2 py-1 rounded-xl border border-slate-200/80 dark:border-slate-700/70 text-xs">
+            <span class="text-[10px] sm:text-[11px] font-extrabold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                 <span>⚡</span> Bantuan:
             </span>
-            <div class="flex items-center gap-1.5 sm:gap-2">
-                <!-- Power-Up: Intip (Peek) -->
-                <button id="powerup-peek" title="Intip semua kartu selama 1.2 detik (1x per ronde)" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:border-blue-400 font-bold text-slate-700 dark:text-slate-200 shadow-sm active:scale-95 transition disabled:opacity-40 disabled:pointer-events-none">
-                    <span>👁️</span> Intip <span id="peek-count" class="text-[10px] bg-blue-100 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300 px-1.5 py-0.2 rounded-full font-black">1</span>
+            <div class="flex items-center gap-1 sm:gap-1.5">
+                <button id="powerup-peek" title="Intip kartu 1.2 detik (1x)" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 font-bold text-slate-700 dark:text-slate-200 shadow-sm active:scale-95 transition text-[11px] disabled:opacity-40 disabled:pointer-events-none">
+                    <span>👁️</span> Intip <span id="peek-count" class="text-[9px] bg-blue-100 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300 px-1 rounded-full font-black">1</span>
                 </button>
-                <!-- Power-Up: Hint (Buka 1 Pasang) -->
-                <button id="powerup-hint" title="Buka otomatis 1 pasang kartu (1x per ronde)" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:border-emerald-400 font-bold text-slate-700 dark:text-slate-200 shadow-sm active:scale-95 transition disabled:opacity-40 disabled:pointer-events-none">
-                    <span>🪄</span> Hint <span id="hint-count" class="text-[10px] bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300 px-1.5 py-0.2 rounded-full font-black">1</span>
+                <button id="powerup-hint" title="Buka 1 pasang otomatis (1x)" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 font-bold text-slate-700 dark:text-slate-200 shadow-sm active:scale-95 transition text-[11px] disabled:opacity-40 disabled:pointer-events-none">
+                    <span>🪄</span> Hint <span id="hint-count" class="text-[9px] bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300 px-1 rounded-full font-black">1</span>
                 </button>
-                <!-- Power-Up: Freeze (Bekukan Waktu 5 Detik) -->
-                <button id="powerup-freeze" title="Bekukan waktu selama 5 detik (1x per ronde)" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:border-cyan-400 font-bold text-slate-700 dark:text-slate-200 shadow-sm active:scale-95 transition disabled:opacity-40 disabled:pointer-events-none">
-                    <span>⏱️</span> Beku <span id="freeze-count" class="text-[10px] bg-cyan-100 text-cyan-700 dark:bg-cyan-900/60 dark:text-cyan-300 px-1.5 py-0.2 rounded-full font-black">1</span>
+                <button id="powerup-freeze" title="Bekukan waktu 5 detik (1x)" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 font-bold text-slate-700 dark:text-slate-200 shadow-sm active:scale-95 transition text-[11px] disabled:opacity-40 disabled:pointer-events-none">
+                    <span>⏱️</span> Beku <span id="freeze-count" class="text-[9px] bg-cyan-100 text-cyan-700 dark:bg-cyan-900/60 dark:text-cyan-300 px-1 rounded-full font-black">1</span>
                 </button>
             </div>
         </div>
 
-        <!-- Banner Flash Peek (Hafalkan Kartu) -->
-        <div id="peek-banner" class="hidden bg-indigo-600 text-white rounded-xl py-2 px-3 mb-3 text-center text-xs font-bold flex items-center justify-center gap-2 animate-pulse">
-            <span>👁️</span> Hafalkan posisi kartu! Permainan dimulai dalam: <span id="peek-countdown" class="text-amber-300 text-sm font-extrabold">3</span>s
+        <!-- Banner Flash Peek -->
+        <div id="peek-banner" class="hidden bg-indigo-600 text-white rounded-xl py-1.5 px-3 mb-2 text-center text-xs font-bold flex items-center justify-center gap-1.5 animate-pulse">
+            <span>👁️</span> Hafalkan letak kartu! Sisa: <span id="peek-countdown" class="text-amber-300 font-black">3</span>s
         </div>
 
-        <!-- Grid Kartu Game -->
-        <div id="game-grid" class="grid gap-2 sm:gap-3 w-full">
-            <!-- Kartu akan di-generate oleh JavaScript -->
+        <!-- Grid Kartu Game (Aspect-Square & Proporsional Sempurna) -->
+        <div id="game-grid" class="grid gap-1.5 sm:gap-2.5 w-full mx-auto">
+            <!-- Kartu di-generate dinamis via JS -->
         </div>
     </div>
 
-    <!-- Modal Kemenangan (Skor, Bintang, Share & Confetti) -->
-    <div id="win-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 text-center max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-800 transform transition-all">
-            <div class="text-5xl mb-2">🎉</div>
-            <h2 id="win-title" class="text-2xl font-black text-slate-800 dark:text-white mb-1">Hebat, Kamu Menang!</h2>
+    <!-- Modal Kemenangan (Win) -->
+    <div id="win-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3 z-50">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 text-center max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-800 transform transition-all max-h-[92vh] overflow-y-auto">
+            <div class="text-4xl mb-1">🎉</div>
+            <h2 id="win-title" class="text-xl sm:text-2xl font-black text-slate-800 dark:text-white mb-0.5">Hebat, Kamu Menang!</h2>
             
-            <!-- Rating Bintang (Stars) -->
-            <div id="win-stars" class="flex justify-center items-center gap-1.5 text-2xl my-2 text-amber-400">
+            <div id="win-stars" class="flex justify-center items-center gap-1 text-2xl my-1.5 text-amber-400">
                 <span>⭐</span><span>⭐</span><span>⭐</span>
             </div>
             
-            <p id="win-subtitle" class="text-xs text-slate-500 dark:text-slate-400 mb-3">Tantangan berhasil diselesaikan dengan baik!</p>
+            <p id="win-subtitle" class="text-xs text-slate-500 dark:text-slate-400 mb-2.5">Tantangan berhasil diselesaikan dengan baik!</p>
 
-            <!-- Badge Rekor Baru -->
-            <div id="new-record-badge" class="hidden inline-flex items-center gap-1 px-3 py-1 bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 rounded-full text-xs font-extrabold border border-amber-300 dark:border-amber-700 mb-3 animate-bounce">
+            <div id="new-record-badge" class="hidden inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 rounded-full text-[11px] font-extrabold border border-amber-300 dark:border-amber-700 mb-2 animate-bounce">
                 <span>🏆</span> REKOR SKOR BARU!
             </div>
 
             <!-- Banner Total Skor Akhir -->
-            <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white rounded-2xl p-3.5 mb-3.5 shadow-lg shadow-amber-200 dark:shadow-none">
-                <div class="text-[11px] font-semibold tracking-wider uppercase text-amber-100">Total Skor Akhir</div>
-                <div id="final-total-score" class="text-3xl font-black tracking-tight mt-0.5">0</div>
+            <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white rounded-2xl p-3 mb-3 shadow-md">
+                <div class="text-[10px] font-semibold tracking-wider uppercase text-amber-100">Total Skor Akhir</div>
+                <div id="final-total-score" class="text-2xl sm:text-3xl font-black tracking-tight mt-0.5">0</div>
             </div>
 
-            <!-- Rincian Poin & Statistik -->
-            <div class="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-3.5 mb-4 text-xs text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 space-y-1.5 text-left">
+            <!-- Rincian Skor -->
+            <div class="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-3 mb-3 text-xs text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 space-y-1 text-left">
                 <div class="flex justify-between items-center text-slate-600 dark:text-slate-400">
-                    <span>Poin Pasangan & Combo:</span>
+                    <span>Poin Kartu & Combo:</span>
                     <span id="stat-base-score" class="font-bold text-slate-800 dark:text-white">0</span>
                 </div>
                 <div class="flex justify-between items-center text-slate-600 dark:text-slate-400">
-                    <span>Bonus Waktu (<span id="final-remaining">0s</span> tersisa):</span>
+                    <span>Bonus Waktu (<span id="final-remaining">0s</span>):</span>
                     <span id="stat-time-bonus" class="font-bold text-emerald-600 dark:text-emerald-400">+0</span>
                 </div>
                 <div class="flex justify-between items-center text-slate-600 dark:text-slate-400">
-                    <span>Bonus Langkah (<span id="final-moves">0</span> langkah):</span>
+                    <span>Bonus Langkah (<span id="final-moves">0</span>):</span>
                     <span id="stat-move-bonus" class="font-bold text-blue-600 dark:text-blue-400">+0</span>
                 </div>
-                <div class="flex justify-between items-center text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 pt-1.5">
-                    <span>Multiplier Mode Ini:</span>
+                <div class="flex justify-between items-center text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 pt-1">
+                    <span>Multiplier Mode:</span>
                     <span id="stat-multiplier" class="font-bold text-amber-600 dark:text-amber-400">x1.0</span>
                 </div>
             </div>
 
-            <div class="space-y-2">
-                <button id="modal-next-btn" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition shadow-lg shadow-emerald-200 dark:shadow-none">
+            <div class="space-y-1.5">
+                <button id="modal-next-btn" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs sm:text-sm transition shadow">
                     Lanjut Berikutnya ➔
                 </button>
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-1.5">
                     <button id="modal-restart-btn" class="py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs transition">
                         Main Lagi
                     </button>
@@ -578,163 +510,149 @@
         </div>
     </div>
 
-    <!-- Modal Game Over / Kalah -->
-    <div id="lose-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 text-center max-w-sm w-full shadow-2xl border border-rose-100 dark:border-rose-900/50 transform transition-all">
-            <div class="text-5xl mb-2">⏰</div>
-            <h2 class="text-2xl font-black text-rose-600 dark:text-rose-400 mb-1">Game Over!</h2>
-            <p id="lose-reason" class="text-xs text-slate-600 dark:text-slate-400 font-medium mb-3">Waktu telah habis. Anda kalah!</p>
+    <!-- Modal Kalah (Lose) -->
+    <div id="lose-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3 z-50">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 text-center max-w-sm w-full shadow-2xl border border-rose-100 dark:border-rose-900/50 transform transition-all max-h-[92vh] overflow-y-auto">
+            <div class="text-4xl mb-1">⏰</div>
+            <h2 class="text-xl font-black text-rose-600 dark:text-rose-400 mb-0.5">Game Over!</h2>
+            <p id="lose-reason" class="text-xs text-slate-600 dark:text-slate-400 font-medium mb-2.5">Waktu telah habis. Anda kalah!</p>
 
-            <!-- Skor Yang Sempat Diraih -->
-            <div class="bg-rose-50/70 dark:bg-rose-950/40 rounded-2xl p-3.5 mb-4 text-xs text-slate-700 dark:text-slate-300 border border-rose-100 dark:border-rose-900/50 space-y-1.5 text-left">
+            <div class="bg-rose-50/70 dark:bg-rose-950/40 rounded-xl p-3 mb-3 text-xs text-slate-700 dark:text-slate-300 border border-rose-100 dark:border-rose-900/50 space-y-1 text-left">
                 <div class="flex justify-between items-center">
-                    <span>Skor Dikumpulkan:</span>
-                    <span id="lose-score" class="font-bold text-amber-600 dark:text-amber-400 text-sm">0</span>
+                    <span>Skor Diraih:</span>
+                    <span id="lose-score" class="font-bold text-amber-600 dark:text-amber-400">0</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span>Rekor Terbaik Mode Ini:</span>
-                    <span id="lose-best-score" class="font-bold text-slate-800 dark:text-white text-sm">0</span>
+                    <span>Rekor Mode Ini:</span>
+                    <span id="lose-best-score" class="font-bold text-slate-800 dark:text-white">0</span>
                 </div>
-                <div class="flex justify-between items-center border-t border-rose-200/60 dark:border-rose-800/50 pt-1.5">
+                <div class="flex justify-between items-center border-t border-rose-200/60 dark:border-rose-800/50 pt-1">
                     <span>Langkah:</span>
                     <span id="lose-moves" class="font-bold text-blue-600 dark:text-blue-400">0</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span>Pasangan Berhasil Cocok:</span>
+                    <span>Pasangan Cocok:</span>
                     <span id="lose-pairs" class="font-bold text-rose-600 dark:text-rose-400">0/3</span>
                 </div>
             </div>
 
-            <button id="modal-lose-restart-btn" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-sm transition shadow-lg shadow-rose-200 dark:shadow-none">
+            <button id="modal-lose-restart-btn" class="w-full py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition shadow">
                 Coba Lagi 🔄
             </button>
         </div>
     </div>
 
-    <!-- Modal Papan Rekor Semua Mode -->
-    <div id="leaderboard-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-800 transform transition-all">
-            <div class="flex justify-between items-center mb-3">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">📊</span>
-                    <h2 class="text-lg font-black text-slate-800 dark:text-white">Papan Rekor Skor</h2>
+    <!-- Modal Papan Rekor -->
+    <div id="leaderboard-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3 z-50">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-800 transform transition-all max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-1.5">
+                    <span class="text-xl">📊</span>
+                    <h2 class="text-base font-black text-slate-800 dark:text-white">Papan Rekor Skor</h2>
                 </div>
-                <button id="close-leaderboard-btn" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl font-bold p-1">
-                    ✕
-                </button>
+                <button id="close-leaderboard-btn" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-lg font-bold p-1">✕</button>
             </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Rekor skor tertinggi yang tersimpan di perangkat Anda:</p>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">Rekor skor tertinggi tersimpan di perangkat ini:</p>
 
-            <div class="mb-3">
-                <div class="text-[11px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider mb-1">🏆 Rekor Mode Level</div>
+            <div class="mb-2">
+                <div class="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider mb-1">🏆 Mode Level</div>
                 <div id="leaderboard-levels-list" class="space-y-1 text-xs"></div>
             </div>
 
-            <div class="mb-4">
-                <div class="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-1">🔥 Rekor Mode Challenge</div>
+            <div class="mb-3">
+                <div class="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-1">🔥 Mode Challenge</div>
                 <div id="leaderboard-challenges-list" class="space-y-1 text-xs"></div>
             </div>
 
-            <button id="modal-close-leaderboard-btn" class="w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs transition">
-                Tutup Papan Rekor
-            </button>
-        </div>
-    </div>
-
-    <!-- Modal Pencapaian & Medali (Achievements) -->
-    <div id="achievements-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-800 transform transition-all">
-            <div class="flex justify-between items-center mb-3">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">🎖️</span>
-                    <h2 class="text-lg font-black text-slate-800 dark:text-white">Pencapaian & Trofi</h2>
-                </div>
-                <button id="close-achievements-btn" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl font-bold p-1">
-                    ✕
-                </button>
-            </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Buka semua medali dengan menyelesaikan berbagai tantangan memori:</p>
-
-            <div id="achievements-list" class="space-y-2 text-xs max-h-72 overflow-y-auto pr-1">
-                <!-- Di-generate via JS -->
-            </div>
-
-            <button id="modal-close-achievements-btn" class="mt-4 w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs transition">
+            <button id="modal-close-leaderboard-btn" class="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs transition">
                 Tutup
             </button>
         </div>
     </div>
 
-    <!-- Modal Kustomisasi Skin & Tema Kartu -->
-    <div id="themes-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-800 transform transition-all">
-            <div class="flex justify-between items-center mb-3">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">🎨</span>
-                    <h2 class="text-lg font-black text-slate-800 dark:text-white">Skin Kartu & Tema</h2>
+    <!-- Modal Pencapaian (Achievements) -->
+    <div id="achievements-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3 z-50">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-800 transform transition-all max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-1.5">
+                    <span class="text-xl">🎖️</span>
+                    <h2 class="text-base font-black text-slate-800 dark:text-white">Pencapaian & Trofi</h2>
                 </div>
-                <button id="close-themes-btn" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl font-bold p-1">
-                    ✕
+                <button id="close-achievements-btn" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-lg font-bold p-1">✕</button>
+            </div>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">Buka semua medali dengan menyelesaikan berbagai tantangan:</p>
+
+            <div id="achievements-list" class="space-y-1.5 text-xs max-h-60 overflow-y-auto pr-1"></div>
+
+            <button id="modal-close-achievements-btn" class="mt-3 w-full py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs transition">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Kustomisasi Skin & Tema -->
+    <div id="themes-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3 z-50">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-800 transform transition-all max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-1.5">
+                    <span class="text-xl">🎨</span>
+                    <h2 class="text-base font-black text-slate-800 dark:text-white">Skin Kartu</h2>
+                </div>
+                <button id="close-themes-btn" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-lg font-bold p-1">✕</button>
+            </div>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">Pilih gaya desain sampul kartu:</p>
+
+            <div class="grid grid-cols-2 gap-1.5 text-xs font-bold mb-3">
+                <button class="skin-opt-btn p-2 rounded-xl border border-blue-500 bg-blue-600 text-white flex items-center justify-center gap-1" data-skin="default">
+                    <span>🔵</span> Sapphire
+                </button>
+                <button class="skin-opt-btn p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1" data-skin="skin-cyberpunk">
+                    <span>🟣</span> Cyberpunk
+                </button>
+                <button class="skin-opt-btn p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1" data-skin="skin-emerald">
+                    <span>🟢</span> Emerald
+                </button>
+                <button class="skin-opt-btn p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1" data-skin="skin-sunset">
+                    <span>🟠</span> Sunset
+                </button>
+                <button class="skin-opt-btn col-span-2 p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1" data-skin="skin-obsidian">
+                    <span>⚫</span> Obsidian Gold
                 </button>
             </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Pilih desain tampilan kartu favorit Anda:</p>
 
-            <div class="space-y-3 mb-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Gaya Sampul Kartu (Skin):</label>
-                    <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-                        <button class="skin-opt-btn p-2 rounded-xl border border-blue-500 bg-blue-600 text-white flex items-center justify-center gap-1.5" data-skin="default">
-                            <span>🔵</span> Sapphire
-                        </button>
-                        <button class="skin-opt-btn p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1.5" data-skin="skin-cyberpunk">
-                            <span>🟣</span> Cyberpunk
-                        </button>
-                        <button class="skin-opt-btn p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1.5" data-skin="skin-emerald">
-                            <span>🟢</span> Emerald
-                        </button>
-                        <button class="skin-opt-btn p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1.5" data-skin="skin-sunset">
-                            <span>🟠</span> Sunset
-                        </button>
-                        <button class="skin-opt-btn col-span-2 p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1.5" data-skin="skin-obsidian">
-                            <span>⚫</span> Obsidian Gold
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <button id="modal-close-themes-btn" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition">
+            <button id="modal-close-themes-btn" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition">
                 Simpan & Tutup
             </button>
         </div>
     </div>
 
     <!-- Modal Panduan Install iOS Safari -->
-    <div id="ios-install-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-800 transform transition-all text-center">
-            <div class="text-4xl mb-2">🍏</div>
-            <h3 class="text-lg font-black text-slate-800 dark:text-white mb-1">Pasang di iPhone / iPad</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Untuk memasang game ini di layar utama perangkat Apple Anda, ikuti langkah berikut:</p>
+    <div id="ios-install-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3 z-50">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-800 transform transition-all text-center max-h-[90vh] overflow-y-auto">
+            <div class="text-3xl mb-1">🍏</div>
+            <h3 class="text-base font-black text-slate-800 dark:text-white mb-0.5">Pasang di iPhone / iPad</h3>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Untuk memasang game ini di layar utama:</p>
 
-            <div class="space-y-3 text-left text-xs text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-                <div class="flex items-start gap-2.5">
-                    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold shrink-0 text-[11px]">1</span>
-                    <span>Buka halaman ini menggunakan browser <strong>Safari</strong> di iOS.</span>
+            <div class="space-y-2 text-left text-xs text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                <div class="flex items-start gap-2">
+                    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-700 font-bold shrink-0 text-[10px]">1</span>
+                    <span>Buka game ini di browser <strong>Safari</strong>.</span>
                 </div>
-                <div class="flex items-start gap-2.5">
-                    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold shrink-0 text-[11px]">2</span>
-                    <span>Ketuk tombol <strong>Bagikan (Share)</strong> <span class="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-700 rounded text-slate-800 dark:text-white font-bold">⎋</span> di bilah bawah Safari.</span>
+                <div class="flex items-start gap-2">
+                    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-700 font-bold shrink-0 text-[10px]">2</span>
+                    <span>Ketuk tombol <strong>Bagikan (Share)</strong> <span class="px-1 py-0.2 bg-slate-200 dark:bg-slate-700 rounded text-slate-800 dark:text-white font-bold">⎋</span> di bilah bawah.</span>
                 </div>
-                <div class="flex items-start gap-2.5">
-                    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold shrink-0 text-[11px]">3</span>
-                    <span>Gulir ke bawah lalu pilih opsi <strong>"Tambah ke Layar Utama" (Add to Home Screen)</strong> ➕.</span>
+                <div class="flex items-start gap-2">
+                    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-700 font-bold shrink-0 text-[10px]">3</span>
+                    <span>Pilih <strong>"Tambah ke Layar Utama" (Add to Home Screen)</strong> ➕.</span>
                 </div>
-                <div class="flex items-start gap-2.5">
-                    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold shrink-0 text-[11px]">4</span>
-                    <span>Ketuk <strong>"Tambah" (Add)</strong> di kanan atas. Selesai!</span>
+                <div class="flex items-start gap-2">
+                    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-700 font-bold shrink-0 text-[10px]">4</span>
+                    <span>Ketuk <strong>"Tambah"</strong> di kanan atas. Selesai!</span>
                 </div>
             </div>
 
-            <button id="close-ios-modal-btn" class="mt-4 w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition shadow-md shadow-blue-200 dark:shadow-none">
+            <button id="close-ios-modal-btn" class="mt-3 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition">
                 Mengerti
             </button>
         </div>
@@ -742,17 +660,17 @@
 
     <!-- PWA Toast Notification -->
     <div id="pwa-toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 hidden transition-all duration-300">
-        <div class="bg-slate-900/90 dark:bg-slate-800/95 backdrop-blur-md text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 border border-slate-700/60 max-w-sm">
+        <div class="bg-slate-900/90 dark:bg-slate-800/95 backdrop-blur-md text-white text-[11px] font-semibold px-3.5 py-2 rounded-full shadow-xl flex items-center gap-1.5 border border-slate-700/60 max-w-xs">
             <span id="pwa-toast-icon">✨</span>
             <span id="pwa-toast-message">Pesan notifikasi</span>
-            <button id="pwa-toast-action" class="hidden ml-2 px-2.5 py-0.5 bg-blue-500 hover:bg-blue-600 rounded-full text-[11px] font-bold text-white transition">Aksi</button>
+            <button id="pwa-toast-action" class="hidden ml-1.5 px-2 py-0.5 bg-blue-500 hover:bg-blue-600 rounded-full text-[10px] font-bold text-white transition">Aksi</button>
         </div>
     </div>
 
     <!-- Logika Game JavaScript Lengkap -->
     <script>
         // ==========================================
-        // 1. DATA MASTER LEVEL, TANTANGAN & TEMA
+        // 1. DATA MASTER
         // ==========================================
         const THEMES = {
             food: ['🍕', '🍔', '🍟', '🍩', '🍣', '🍦', '🍜', '🌮', '🍿', '🍪'],
@@ -772,7 +690,7 @@
                 targetScore: 900,
                 multiplier: 1.0,
                 emojis: ['🚀', '🍕', '🐱'],
-                description: "6 Kartu (2x3) • Waktu 30 Detik • Multiplier Skor x1.0"
+                description: "6 Kartu • 30s • 3 Pasang"
             },
             {
                 level: 2,
@@ -783,7 +701,7 @@
                 targetScore: 1100,
                 multiplier: 1.2,
                 emojis: ['🚀', '🍕', '🐱', '🎮'],
-                description: "8 Kartu (2x4) • Waktu 25 Detik • Multiplier Skor x1.2"
+                description: "8 Kartu • 25s • 4 Pasang"
             },
             {
                 level: 3,
@@ -794,7 +712,7 @@
                 targetScore: 1400,
                 multiplier: 1.5,
                 emojis: ['🚀', '🍕', '🐱', '🎮', '💎', '🔥'],
-                description: "12 Kartu (3x4) • Waktu 35 Detik • Multiplier Skor x1.5"
+                description: "12 Kartu • 35s • 6 Pasang"
             },
             {
                 level: 4,
@@ -805,25 +723,25 @@
                 targetScore: 1800,
                 multiplier: 1.8,
                 emojis: ['🚀', '🍕', '🐱', '🎮', '💎', '🔥', '⭐', '🎧'],
-                description: "16 Kartu (4x4) • Waktu 45 Detik • Multiplier Skor x1.8"
+                description: "16 Kartu • 45s • 8 Pasang"
             },
             {
                 level: 5,
                 name: "Grandmaster",
-                cols: 5,
+                cols: 4, // 4 Kolom x 5 Baris agar proporsional di layar HP vertikal
                 pairs: 10,
                 time: 50,
                 targetScore: 2400,
                 multiplier: 2.0,
                 emojis: ['🚀', '🍕', '🐱', '🎮', '💎', '🔥', '⭐', '🎧', '🍔', '⚡'],
-                description: "20 Kartu (4x5) • Waktu 50 Detik • Multiplier Skor x2.0"
+                description: "20 Kartu • 50s • 10 Pasang"
             }
         ];
 
         const CHALLENGES = [
             {
                 id: 'time-rush',
-                name: '⚡ Time Rush',
+                name: '⚡ Speed',
                 cols: 4,
                 pairs: 4,
                 time: 15,
@@ -833,12 +751,12 @@
                 peekSeconds: 0,
                 penaltySeconds: 0,
                 emojis: ['⚡', '💣', '⏰', '🏃'],
-                description: "Kilat! Temukan 4 pasang hanya dalam 15 detik! Multiplier x1.6",
-                tag: "Speedrun"
+                description: "Time Rush: 4 Pasang dalam 15 Detik!",
+                tag: "Speed"
             },
             {
                 id: 'flash-peek',
-                name: '👁️ Flash Peek',
+                name: '👁️ Peek',
                 cols: 4,
                 pairs: 6,
                 time: 25,
@@ -848,12 +766,12 @@
                 peekSeconds: 3,
                 penaltySeconds: 0,
                 emojis: ['👁️', '🔮', '🧠', '💡', '🎭', '🎨'],
-                description: "Kartu terbuka 3 detik di awal! Ingat letaknya! Multiplier x1.3",
+                description: "Flash Peek: Kartu terbuka 3 detik awal!",
                 tag: "Hafalan"
             },
             {
                 id: 'move-limit',
-                name: '🎯 Batas Langkah',
+                name: '🎯 Langkah',
                 cols: 4,
                 pairs: 4,
                 time: 40,
@@ -863,12 +781,12 @@
                 peekSeconds: 0,
                 penaltySeconds: 0,
                 emojis: ['🎯', '🏹', '🎲', '🧩'],
-                description: "Hati-hati! Maksimal hanya boleh 8 langkah! Multiplier x1.8",
-                tag: "Maks 8 Langkah"
+                description: "Batas Langkah: Maksimal hanya 8 langkah!",
+                tag: "Maks 8"
             },
             {
                 id: 'penalty-rush',
-                name: '💀 Penalti Waktu',
+                name: '💀 Penalti',
                 cols: 4,
                 pairs: 6,
                 time: 30,
@@ -878,8 +796,8 @@
                 peekSeconds: 0,
                 penaltySeconds: 3,
                 emojis: ['💀', '⚠️', '🔥', '🌪️', '💥', '👻'],
-                description: "Awas! Salah mencocokkan kartu memotong -3 detik waktu! Multiplier x1.5",
-                tag: "Salah = -3s"
+                description: "Penalti Rush: Salah tebak memotong -3 detik!",
+                tag: "-3s"
             }
         ];
 
@@ -890,13 +808,13 @@
             { id: 'flawless', name: 'Pikiran Tajam 🎯', desc: 'Selesaikan permainan tanpa satu pun kesalahan tebak!' },
             { id: 'grandmaster', name: 'Grandmaster Memori 🏆', desc: 'Taklukkan Level 5 (20 Kartu) dengan sukses.' },
             { id: 'challenge_champion', name: 'Penakluk Tantangan 🎖️', desc: 'Selesaikan semua 4 tantangan di Mode Challenge.' },
-            { id: 'tactician', name: 'Taktisi Cerdas 🪄', desc: 'Gunakan power-up Peek, Hint, dan Freeze.' }
+            { id: 'tactician', name: 'Taktisi Cerdas 🪄', desc: 'Gunakan booster Peek, Hint, dan Freeze.' }
         ];
 
         // ==========================================
-        // 2. STATE GAME, SCORE & POWER-UPS
+        // 2. STATE GAME
         // ==========================================
-        let currentMode = 'level'; // 'level', 'challenge', atau 'custom'
+        let currentMode = 'level';
         let currentLevelIndex = 0;
         let currentChallengeIndex = 0;
 
@@ -915,20 +833,12 @@
         let soundEnabled = true;
         let bgmEnabled = false;
 
-        // State Skor
         let currentScore = 0;
         let comboStreak = 0;
         let maxComboInGame = 0;
 
-        // State Power-Up (Booster)
-        let powerups = {
-            peek: 1,
-            hint: 1,
-            freeze: 1
-        };
+        let powerups = { peek: 1, hint: 1, freeze: 1 };
         let usedPowerupsThisGame = { peek: false, hint: false, freeze: false };
-
-        // Card Skin Aktif
         let currentCardSkin = localStorage.getItem('mm_card_skin') || 'default';
 
         // ==========================================
@@ -947,7 +857,6 @@
         const gameGrid = document.getElementById('game-grid');
 
         const scoreElement = document.getElementById('score');
-        const highScoreElement = document.getElementById('high-score');
         const movesElement = document.getElementById('moves');
         const movesLimitElement = document.getElementById('moves-limit');
         const pairsInfoElement = document.getElementById('pairs-info');
@@ -962,12 +871,10 @@
         const ruleTag = document.getElementById('rule-tag');
         const descHighScore = document.getElementById('desc-high-score');
         const descTargetScore = document.getElementById('desc-target-score');
-        const descMultiplier = document.getElementById('desc-multiplier');
 
         const peekBanner = document.getElementById('peek-banner');
         const peekCountdown = document.getElementById('peek-countdown');
 
-        // Power-Up buttons
         const powerupPeekBtn = document.getElementById('powerup-peek');
         const powerupHintBtn = document.getElementById('powerup-hint');
         const powerupFreezeBtn = document.getElementById('powerup-freeze');
@@ -1023,14 +930,13 @@
         const resetBtn = document.getElementById('reset-btn');
         const darkmodeToggleBtn = document.getElementById('darkmode-toggle-btn');
 
-        // Custom Mode elements
         const customGridSelect = document.getElementById('custom-grid-select');
         const customThemeSelect = document.getElementById('custom-theme-select');
         const customTimeSelect = document.getElementById('custom-time-select');
         const customStartBtn = document.getElementById('custom-start-btn');
 
         // ==========================================
-        // 4. STORAGE REKOR & PENCAPAIAN
+        // 4. STORAGE
         // ==========================================
         function getStorageKey(mode, idx) {
             return `memory_match_best_${mode}_${idx}`;
@@ -1062,7 +968,7 @@
                 localStorage.setItem('mm_unlocked_achievements', JSON.stringify(list));
                 const item = MASTER_ACHIEVEMENTS.find(a => a.id === id);
                 if (item) {
-                    showPwaToast(`🎖️ Medali Terbuka: ${item.name}!`);
+                    showPwaToast(`🎖️ Medali: ${item.name}!`);
                     playSound('achievement');
                 }
             }
@@ -1070,12 +976,11 @@
 
         function updateHighScoreDisplay() {
             const best = getStoredHighScore();
-            highScoreElement.textContent = best.toLocaleString('id-ID');
-            descHighScore.textContent = best > 0 ? `${best.toLocaleString('id-ID')} poin` : 'Belum ada';
+            descHighScore.textContent = best > 0 ? best.toLocaleString('id-ID') : '0';
         }
 
         // ==========================================
-        // 5. AUDIO SYNTHESIZER & PROCEDURAL BGM (Web Audio API)
+        // 5. AUDIO SYNTHESIZER (Web Audio API)
         // ==========================================
         let audioCtx = null;
         function getAudioContext() {
@@ -1101,11 +1006,11 @@
                 if (type === 'flip') {
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(420, now);
-                    osc.frequency.exponentialRampToValueAtTime(750, now + 0.08);
+                    osc.frequency.exponentialRampToValueAtTime(750, now + 0.07);
                     gain.gain.setValueAtTime(0.12, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.07);
                     osc.start(now);
-                    osc.stop(now + 0.08);
+                    osc.stop(now + 0.07);
                 } else if (type === 'match') {
                     const baseNotes = [523.25, 659.25, 783.99, 1046.5];
                     baseNotes.forEach((freq, i) => {
@@ -1115,26 +1020,26 @@
                         g.connect(ctx.destination);
                         o.frequency.value = freq * pitchMultiplier;
                         g.gain.setValueAtTime(0.15, now + i * 0.06);
-                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.16);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.15);
                         o.start(now + i * 0.06);
-                        o.stop(now + i * 0.06 + 0.16);
+                        o.stop(now + i * 0.06 + 0.15);
                     });
                 } else if (type === 'mismatch') {
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(220, now);
-                    osc.frequency.exponentialRampToValueAtTime(140, now + 0.2);
+                    osc.frequency.exponentialRampToValueAtTime(140, now + 0.18);
                     gain.gain.setValueAtTime(0.15, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
                     osc.start(now);
-                    osc.stop(now + 0.2);
+                    osc.stop(now + 0.18);
                 } else if (type === 'penalty') {
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(360, now);
-                    osc.frequency.linearRampToValueAtTime(130, now + 0.25);
+                    osc.frequency.linearRampToValueAtTime(130, now + 0.22);
                     gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
                     osc.start(now);
-                    osc.stop(now + 0.25);
+                    osc.stop(now + 0.22);
                 } else if (type === 'freeze') {
                     [880, 1174, 1567].forEach((freq, i) => {
                         const o = ctx.createOscillator();
@@ -1143,10 +1048,10 @@
                         o.connect(g);
                         g.connect(ctx.destination);
                         o.frequency.value = freq;
-                        g.gain.setValueAtTime(0.12, now + i * 0.08);
-                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.3);
-                        o.start(now + i * 0.08);
-                        o.stop(now + i * 0.08 + 0.3);
+                        g.gain.setValueAtTime(0.12, now + i * 0.07);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.07 + 0.25);
+                        o.start(now + i * 0.07);
+                        o.stop(now + i * 0.07 + 0.25);
                     });
                 } else if (type === 'hint') {
                     [440, 554.37, 659.25].forEach((freq, i) => {
@@ -1156,36 +1061,36 @@
                         o.connect(g);
                         g.connect(ctx.destination);
                         o.frequency.value = freq;
-                        g.gain.setValueAtTime(0.15, now + i * 0.07);
-                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.07 + 0.2);
-                        o.start(now + i * 0.07);
-                        o.stop(now + i * 0.07 + 0.2);
+                        g.gain.setValueAtTime(0.14, now + i * 0.06);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.18);
+                        o.start(now + i * 0.06);
+                        o.stop(now + i * 0.06 + 0.18);
                     });
                 } else if (type === 'achievement') {
-                    [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((freq, i) => {
+                    [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
                         const o = ctx.createOscillator();
                         const g = ctx.createGain();
                         o.type = 'triangle';
                         o.connect(g);
                         g.connect(ctx.destination);
                         o.frequency.value = freq;
-                        g.gain.setValueAtTime(0.18, now + i * 0.07);
-                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.07 + 0.25);
-                        o.start(now + i * 0.07);
-                        o.stop(now + i * 0.07 + 0.25);
+                        g.gain.setValueAtTime(0.16, now + i * 0.06);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.2);
+                        o.start(now + i * 0.06);
+                        o.stop(now + i * 0.06 + 0.2);
                     });
                 } else if (type === 'win') {
                     [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
                         const o = ctx.createOscillator();
                         const g = ctx.createGain();
+                        o.type = 'triangle';
                         o.connect(g);
                         g.connect(ctx.destination);
-                        o.type = 'triangle';
                         o.frequency.value = freq;
-                        g.gain.setValueAtTime(0.2, now + i * 0.1);
-                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.35);
-                        o.start(now + i * 0.1);
-                        o.stop(now + i * 0.1 + 0.35);
+                        g.gain.setValueAtTime(0.18, now + i * 0.08);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.3);
+                        o.start(now + i * 0.08);
+                        o.stop(now + i * 0.08 + 0.3);
                     });
                 } else if (type === 'lose') {
                     [392, 349.23, 311.13, 261.63].forEach((freq, i) => {
@@ -1195,20 +1100,18 @@
                         g.connect(ctx.destination);
                         o.type = 'sawtooth';
                         o.frequency.value = freq;
-                        g.gain.setValueAtTime(0.15, now + i * 0.12);
-                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.25);
-                        o.start(now + i * 0.12);
-                        o.stop(now + i * 0.12 + 0.25);
+                        g.gain.setValueAtTime(0.14, now + i * 0.1);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.22);
+                        o.start(now + i * 0.1);
+                        o.stop(now + i * 0.1 + 0.22);
                     });
                 }
-            } catch (e) {
-                // AudioContext fail safe
-            }
+            } catch (e) {}
         }
 
-        // BGM Procedural Generator (Santai & Menenangkan)
+        // BGM Ambient Synthesizer
         let bgmInterval = null;
-        const BGM_SCALE = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25]; // C Major Pentatonic
+        const BGM_SCALE = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
         let bgmNoteIndex = 0;
 
         function startBgm() {
@@ -1228,10 +1131,10 @@
                     bgmNoteIndex = (bgmNoteIndex + Math.floor(Math.random() * 3) + 1);
 
                     osc.frequency.setValueAtTime(freq, now);
-                    gain.gain.setValueAtTime(0.035, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+                    gain.gain.setValueAtTime(0.03, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
                     osc.start(now);
-                    osc.stop(now + 0.45);
+                    osc.stop(now + 0.4);
                 } catch (e) {}
             }, 600);
         }
@@ -1243,7 +1146,6 @@
             }
         }
 
-        // Haptic Feedback Helper
         function triggerHaptic(pattern = 15) {
             if (window.navigator && window.navigator.vibrate) {
                 try {
@@ -1253,7 +1155,7 @@
         }
 
         // ==========================================
-        // 6. CONFETTI PARTICLE SYSTEM (Canvas)
+        // 6. CONFETTI (Canvas)
         // ==========================================
         const confettiCanvas = document.getElementById('confetti-canvas');
         const confettiCtx = confettiCanvas.getContext('2d');
@@ -1270,15 +1172,15 @@
         function fireConfetti() {
             confettiParticles = [];
             const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'];
-            for (let i = 0; i < 90; i++) {
+            for (let i = 0; i < 75; i++) {
                 confettiParticles.push({
                     x: window.innerWidth / 2,
                     y: window.innerHeight / 2,
-                    w: Math.random() * 10 + 6,
-                    h: Math.random() * 6 + 4,
+                    w: Math.random() * 8 + 5,
+                    h: Math.random() * 5 + 3,
                     color: colors[Math.floor(Math.random() * colors.length)],
-                    vx: (Math.random() - 0.5) * 16,
-                    vy: (Math.random() - 0.7) * 16,
+                    vx: (Math.random() - 0.5) * 14,
+                    vy: (Math.random() - 0.7) * 14,
                     rotation: Math.random() * 360,
                     rotationSpeed: (Math.random() - 0.5) * 10,
                     opacity: 1
@@ -1296,9 +1198,9 @@
             confettiParticles.forEach(p => {
                 p.x += p.vx;
                 p.y += p.vy;
-                p.vy += 0.4; // Gravity
+                p.vy += 0.38;
                 p.rotation += p.rotationSpeed;
-                p.opacity -= 0.008;
+                p.opacity -= 0.009;
 
                 if (p.opacity > 0) {
                     active = true;
@@ -1319,9 +1221,6 @@
             }
         }
 
-        // ==========================================
-        // 7. HELPER SHUFFLE
-        // ==========================================
         function shuffle(array) {
             const arr = [...array];
             for (let i = arr.length - 1; i > 0; i--) {
@@ -1332,7 +1231,7 @@
         }
 
         // ==========================================
-        // 8. RENDER NAV BUTTONS (LEVEL & CHALLENGE)
+        // 7. RENDER NAV BUTTONS (LEVEL & CHALLENGE)
         // ==========================================
         function renderNavButtons() {
             levelButtonsContainer.innerHTML = '';
@@ -1342,15 +1241,15 @@
                 const isActive = (currentMode === 'level' && currentLevelIndex === idx);
                 const scoreVal = getStoredHighScore('level', idx);
 
-                btn.className = `py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all border flex flex-col items-center justify-center ${
+                btn.className = `py-1 sm:py-1.5 px-1 rounded-xl text-xs font-bold transition-all border flex flex-col items-center justify-center ${
                     isActive 
-                        ? 'bg-blue-600 text-white border-blue-600 shadow-md scale-105 ring-2 ring-blue-300 dark:ring-blue-700' 
+                        ? 'bg-blue-600 text-white border-blue-600 shadow scale-102 ring-1.5 ring-blue-300 dark:ring-blue-700' 
                         : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700'
                 }`;
                 btn.innerHTML = `
-                    <span>Lv ${lvl.level}</span>
-                    <span class="text-[9px] font-semibold mt-0.5 ${isActive ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400'}">
-                        🏆 ${scoreVal > 0 ? scoreVal.toLocaleString('id-ID') : '0'}
+                    <span class="text-[11px] sm:text-xs">Lv ${lvl.level}</span>
+                    <span class="text-[9px] font-semibold mt-0.2 ${isActive ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400'}">
+                        🏆 ${scoreVal > 0 ? (scoreVal >= 1000 ? (scoreVal/1000).toFixed(1) + 'k' : scoreVal) : '0'}
                     </span>
                 `;
                 btn.addEventListener('click', () => {
@@ -1369,15 +1268,15 @@
                 const isActive = (currentMode === 'challenge' && currentChallengeIndex === idx);
                 const scoreVal = getStoredHighScore('challenge', idx);
 
-                btn.className = `py-2 rounded-xl text-xs font-bold transition-all border flex flex-col items-center justify-center ${
+                btn.className = `py-1 sm:py-1.5 px-1 rounded-xl text-xs font-bold transition-all border flex flex-col items-center justify-center ${
                     isActive 
-                        ? 'bg-amber-600 text-white border-amber-600 shadow-md scale-105 ring-2 ring-amber-300 dark:ring-amber-700' 
+                        ? 'bg-amber-600 text-white border-amber-600 shadow scale-102 ring-1.5 ring-amber-300 dark:ring-amber-700' 
                         : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700'
                 }`;
                 btn.innerHTML = `
-                    <span class="font-bold text-[11px] sm:text-xs">${ch.name}</span>
-                    <span class="text-[9px] font-semibold mt-0.5 ${isActive ? 'text-amber-100' : 'text-amber-600 dark:text-amber-400'}">
-                        🏆 ${scoreVal > 0 ? scoreVal.toLocaleString('id-ID') : '0'}
+                    <span class="text-[10px] sm:text-xs truncate">${ch.name}</span>
+                    <span class="text-[9px] font-semibold mt-0.2 ${isActive ? 'text-amber-100' : 'text-amber-600 dark:text-amber-400'}">
+                        🏆 ${scoreVal > 0 ? (scoreVal >= 1000 ? (scoreVal/1000).toFixed(1) + 'k' : scoreVal) : '0'}
                     </span>
                 `;
                 btn.addEventListener('click', () => {
@@ -1391,63 +1290,55 @@
         }
 
         // ==========================================
-        // 9. UPDATE MODE UI & DESKRIPSI
+        // 8. UPDATE MODE UI & DESKRIPSI
         // ==========================================
         function updateModeUI() {
-            // Update Tab Styling
-            tabLevel.className = `py-2 rounded-xl transition-all flex items-center justify-center gap-1 ${
+            tabLevel.className = `py-1 rounded-lg transition-all flex items-center justify-center gap-1 ${
                 currentMode === 'level'
-                    ? 'bg-blue-600 text-white shadow-md'
+                    ? 'bg-blue-600 text-white shadow-sm'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`;
-            tabChallenge.className = `py-2 rounded-xl transition-all flex items-center justify-center gap-1 ${
+            tabChallenge.className = `py-1 rounded-lg transition-all flex items-center justify-center gap-1 ${
                 currentMode === 'challenge'
-                    ? 'bg-amber-600 text-white shadow-md'
+                    ? 'bg-amber-600 text-white shadow-sm'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`;
-            tabCustom.className = `py-2 rounded-xl transition-all flex items-center justify-center gap-1 ${
+            tabCustom.className = `py-1 rounded-lg transition-all flex items-center justify-center gap-1 ${
                 currentMode === 'custom'
-                    ? 'bg-indigo-600 text-white shadow-md'
+                    ? 'bg-indigo-600 text-white shadow-sm'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`;
 
-            // Show/Hide Sections
             levelNavContainer.classList.toggle('hidden', currentMode !== 'level');
             challengeNavContainer.classList.toggle('hidden', currentMode !== 'challenge');
             customNavContainer.classList.toggle('hidden', currentMode !== 'custom');
 
             if (currentMode === 'level') {
                 const lvl = LEVELS[currentLevelIndex];
-                document.getElementById('level-badge').textContent = `Level ${lvl.level} - ${lvl.name}`;
                 descIcon.textContent = '🏆';
                 modeDescription.textContent = lvl.description;
                 ruleTag.classList.add('hidden');
                 descTargetScore.textContent = lvl.targetScore.toLocaleString('id-ID');
-                descMultiplier.textContent = `x${lvl.multiplier.toFixed(1)}`;
                 movesLimitElement.classList.add('hidden');
             } else if (currentMode === 'challenge') {
                 const ch = CHALLENGES[currentChallengeIndex];
-                document.getElementById('challenge-badge').textContent = ch.name;
                 descIcon.textContent = '🔥';
                 modeDescription.textContent = ch.description;
                 ruleTag.textContent = ch.tag;
                 ruleTag.classList.remove('hidden');
                 descTargetScore.textContent = ch.targetScore.toLocaleString('id-ID');
-                descMultiplier.textContent = `x${ch.multiplier.toFixed(1)}`;
                 if (ch.maxMoves) {
-                    movesLimitElement.textContent = `/ ${ch.maxMoves}`;
+                    movesLimitElement.textContent = `/${ch.maxMoves}`;
                     movesLimitElement.classList.remove('hidden');
                 } else {
                     movesLimitElement.classList.add('hidden');
                 }
             } else {
-                // Mode Custom
                 descIcon.textContent = '🎲';
-                modeDescription.textContent = "Permainan Bebas Kustom: Atur sendiri jumlah kartu, tema gambar, dan waktu!";
-                ruleTag.textContent = "Bebas";
+                modeDescription.textContent = "Permainan Bebas Kustom";
+                ruleTag.textContent = "Sandbox";
                 ruleTag.classList.remove('hidden');
                 descTargetScore.textContent = "-";
-                descMultiplier.textContent = "x1.0";
                 movesLimitElement.classList.add('hidden');
             }
 
@@ -1456,7 +1347,7 @@
         }
 
         // ==========================================
-        // 10. INISIALISASI GAMEPLAY (INIT GAME)
+        // 9. INISIALISASI GAMEPLAY (INIT GAME)
         // ==========================================
         function initGame() {
             clearInterval(timerInterval);
@@ -1477,7 +1368,6 @@
             isGameStarted = false;
             isBoardLocked = false;
 
-            // Reset Power-Ups
             powerups = { peek: 1, hint: 1, freeze: 1 };
             usedPowerupsThisGame = { peek: false, hint: false, freeze: false };
             updatePowerupUI();
@@ -1486,7 +1376,6 @@
             comboBadge.classList.add('hidden');
             movesElement.textContent = '0';
 
-            // Ambil Parameter Mode
             let totalCardsCount = 6;
             let gridCols = 3;
             let emojiPool = [];
@@ -1508,11 +1397,10 @@
                 totalTime = ch.time;
                 emojiPool = ch.emojis;
             } else {
-                // Mode Custom
                 const cardCount = parseInt(customGridSelect.value, 10);
                 totalPairs = cardCount / 2;
                 totalCardsCount = cardCount;
-                gridCols = cardCount >= 20 ? 5 : 4;
+                gridCols = cardCount >= 20 ? 4 : (cardCount <= 6 ? 3 : 4);
                 const selectedTheme = customThemeSelect.value;
                 emojiPool = THEMES[selectedTheme] || THEMES.food;
                 const customSec = parseInt(customTimeSelect.value, 10);
@@ -1523,31 +1411,43 @@
             pairsInfoElement.textContent = `0/${totalPairs}`;
             updateTimerDisplay();
 
-            // Pasangkan Emoji
             const selectedEmojis = emojiPool.slice(0, totalPairs);
             const cardDataList = [...selectedEmojis, ...selectedEmojis];
             const shuffledCards = shuffle(cardDataList);
 
-            // Setup Grid CSS
+            // Responsive Card Grid Setup (Aspect-Square)
             gameGrid.innerHTML = '';
-            gameGrid.className = `grid gap-2 sm:gap-3 w-full`;
-            if (gridCols === 3) gameGrid.classList.add('grid-cols-3');
-            else if (gridCols === 5) gameGrid.classList.add('grid-cols-4', 'sm:grid-cols-5');
-            else gameGrid.classList.add('grid-cols-4');
+            gameGrid.className = 'grid gap-1.5 sm:gap-2.5 w-full mx-auto';
 
-            // Generate DOM Kartu
+            if (totalCardsCount === 6) {
+                gameGrid.classList.add('grid-cols-3', 'max-w-xs');
+            } else if (totalCardsCount <= 16) {
+                gameGrid.classList.add('grid-cols-4');
+            } else {
+                // 20 cards: 4 columns x 5 rows on mobile portrait, 5 cols on desktop
+                gameGrid.classList.add('grid-cols-4', 'sm:grid-cols-5');
+            }
+
+            // Ukuran Font Emoji Dinamis agar pas di layar mobile
+            let emojiFontSizeClass = 'text-2xl sm:text-3xl';
+            if (totalCardsCount >= 20) {
+                emojiFontSizeClass = 'text-xl sm:text-2xl';
+            } else if (totalCardsCount <= 6) {
+                emojiFontSizeClass = 'text-3xl sm:text-4xl';
+            }
+
             shuffledCards.forEach((emoji, index) => {
                 const card = document.createElement('div');
-                card.className = `card h-20 sm:h-24 cursor-pointer select-none ${currentCardSkin}`;
+                card.className = `card aspect-square cursor-pointer select-none ${currentCardSkin}`;
                 card.dataset.index = index;
                 card.dataset.emoji = emoji;
 
                 card.innerHTML = `
                     <div class="card-inner">
                         <div class="card-front">
-                            <span>?</span>
+                            <span class="text-sm sm:text-lg font-black">?</span>
                         </div>
-                        <div class="card-back text-2xl sm:text-3xl">
+                        <div class="card-back ${emojiFontSizeClass}">
                             <span>${emoji}</span>
                         </div>
                     </div>
@@ -1558,7 +1458,6 @@
                 cards.push(card);
             });
 
-            // Handle Flash Peek Challenge
             if (currentMode === 'challenge') {
                 const ch = CHALLENGES[currentChallengeIndex];
                 if (ch.peekSeconds && ch.peekSeconds > 0) {
@@ -1568,7 +1467,7 @@
         }
 
         // ==========================================
-        // 11. POWER-UPS & BANTUAN
+        // 10. POWER-UPS & BANTUAN
         // ==========================================
         function updatePowerupUI() {
             peekCountSpan.textContent = powerups.peek;
@@ -1580,7 +1479,6 @@
             powerupFreezeBtn.disabled = powerups.freeze <= 0 || isBoardLocked || isFrozen;
         }
 
-        // Power-Up: Intip Kartu (Peek)
         powerupPeekBtn.addEventListener('click', () => {
             if (powerups.peek <= 0 || isBoardLocked) return;
             powerups.peek--;
@@ -1607,7 +1505,6 @@
             checkTacticianAchievement();
         });
 
-        // Power-Up: Hint (Menemukan 1 Pasang)
         powerupHintBtn.addEventListener('click', () => {
             if (powerups.hint <= 0 || isBoardLocked) return;
             powerups.hint--;
@@ -1616,7 +1513,6 @@
             playSound('hint');
             triggerHaptic([40, 40]);
 
-            // Cari 1 pasang belum matched
             const unmatched = cards.filter(c => !c.classList.contains('matched'));
             const emojiMap = {};
             let pair = null;
@@ -1642,7 +1538,6 @@
             checkTacticianAchievement();
         });
 
-        // Power-Up: Freeze Waktu
         powerupFreezeBtn.addEventListener('click', () => {
             if (powerups.freeze <= 0 || isBoardLocked || isFrozen) return;
             powerups.freeze--;
@@ -1653,7 +1548,7 @@
             triggerHaptic([50, 50, 50]);
 
             timerElement.classList.add('timer-frosty');
-            showPwaToast('⏱️ Waktu dibekukan selama 5 detik!');
+            showPwaToast('⏱️ Waktu dibekukan 5 detik!');
 
             setTimeout(() => {
                 isFrozen = false;
@@ -1671,7 +1566,7 @@
         }
 
         // ==========================================
-        // 12. FLASH PEEK CHALLENGE
+        // 11. FLASH PEEK CHALLENGE
         // ==========================================
         function executeFlashPeek(seconds) {
             isBoardLocked = true;
@@ -1696,13 +1591,12 @@
         }
 
         // ==========================================
-        // 13. LOGIKA KLIK & PENCOCOKAN KARTU
+        // 12. KLIK & PENCOCOKAN KARTU
         // ==========================================
         function handleCardClick(card) {
             if (isBoardLocked) return;
             if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
 
-            // Mulai Timer saat kartu pertama dibuka
             if (!isGameStarted) {
                 isGameStarted = true;
                 startTimer();
@@ -1736,7 +1630,6 @@
                 matchedPairs++;
                 pairsInfoElement.textContent = `${matchedPairs}/${totalPairs}`;
 
-                // Pitch semakin tinggi jika combo streak beruntun
                 const pitch = 1 + (comboStreak - 1) * 0.15;
                 playSound('match', pitch);
                 triggerHaptic([30, 40, 50]);
@@ -1744,7 +1637,7 @@
                 let earnedScore = 100;
                 if (comboStreak > 1) {
                     earnedScore += (comboStreak - 1) * 50;
-                    comboBadge.textContent = `COMBO x${comboStreak}!`;
+                    comboBadge.textContent = `x${comboStreak}!`;
                     comboBadge.classList.remove('hidden');
                 }
                 currentScore += earnedScore;
@@ -1763,7 +1656,7 @@
                     if (matchedPairs === totalPairs) {
                         handleGameWin();
                     }
-                }, 350);
+                }, 320);
 
             } else {
                 comboStreak = 0;
@@ -1772,18 +1665,16 @@
                 playSound('mismatch');
                 triggerHaptic([50, 40]);
 
-                // Penalti khusus jika mode penalti-rush
                 if (currentMode === 'challenge' && CHALLENGES[currentChallengeIndex].id === 'penalty-rush') {
                     applyTimePenalty(3);
                 }
 
-                // Cek Batas Langkah jika ada
                 if (currentMode === 'challenge') {
                     const maxM = CHALLENGES[currentChallengeIndex].maxMoves;
                     if (maxM && moves >= maxM && matchedPairs < totalPairs) {
                         setTimeout(() => {
                             handleGameOver("Batas langkah telah habis!");
-                        }, 500);
+                        }, 450);
                         return;
                     }
                 }
@@ -1791,7 +1682,7 @@
                 setTimeout(() => {
                     card1.classList.add('shake');
                     card2.classList.add('shake');
-                }, 150);
+                }, 120);
 
                 setTimeout(() => {
                     card1.classList.remove('flipped', 'shake');
@@ -1799,17 +1690,17 @@
                     flippedCards = [];
                     isBoardLocked = false;
                     updatePowerupUI();
-                }, 650);
+                }, 600);
             }
         }
 
         // ==========================================
-        // 14. TIMER & PENALTI
+        // 13. TIMER & PENALTI
         // ==========================================
         function startTimer() {
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
-                if (isFrozen) return; // Freeze waktu aktif
+                if (isFrozen) return;
 
                 timerSeconds--;
                 updateTimerDisplay();
@@ -1830,7 +1721,6 @@
 
             timerElement.textContent = `${timerSeconds}s`;
 
-            // Update Progress Bar
             const pct = Math.max(0, Math.min(100, (timerSeconds / totalTime) * 100));
             timerBar.style.width = `${pct}%`;
 
@@ -1850,7 +1740,7 @@
 
             penaltyBubble.textContent = `-${sec}s!`;
             penaltyBubble.classList.remove('penalty-anim');
-            void penaltyBubble.offsetWidth; // Trigger reflow
+            void penaltyBubble.offsetWidth;
             penaltyBubble.classList.add('penalty-anim');
         }
 
@@ -1862,7 +1752,7 @@
         }
 
         // ==========================================
-        // 15. KONDISI MENANG (WIN GAME) & BINTANG
+        // 14. KONDISI MENANG (WIN GAME)
         // ==========================================
         function handleGameWin() {
             clearInterval(timerInterval);
@@ -1870,7 +1760,6 @@
             triggerHaptic([100, 50, 100, 50, 150]);
             fireConfetti();
 
-            // Hitung Bonus Waktu & Langkah
             const timeBonus = (timerSeconds < 999) ? timerSeconds * 20 : 100;
             const idealMoves = totalPairs * 2;
             const moveBonus = Math.max(0, (idealMoves + 4 - moves) * 15);
@@ -1881,7 +1770,6 @@
 
             const finalScore = Math.round((currentScore + timeBonus + moveBonus) * mult);
 
-            // Cek Rekor Baru
             const prevBest = getStoredHighScore();
             const isNewRecord = finalScore > prevBest;
             if (isNewRecord) {
@@ -1891,7 +1779,6 @@
                 newRecordBadge.classList.add('hidden');
             }
 
-            // Hitung Bintang (Rating 1 - 3 Stars)
             let starCount = 1;
             const timeRatio = (totalTime > 0 && timerSeconds < 999) ? (timerSeconds / totalTime) : 0.5;
             if (timeRatio >= 0.4 && mismatches <= 2) {
@@ -1901,19 +1788,16 @@
             }
             winStars.innerHTML = '⭐'.repeat(starCount) + '<span class="opacity-30">' + '⭐'.repeat(3 - starCount) + '</span>';
 
-            // Cek Pencapaian (Achievements)
             unlockAchievement('first_win');
             if (mismatches === 0) unlockAchievement('flawless');
             if (totalTime - timerSeconds <= 15 && totalTime < 999) unlockAchievement('speedster');
             if (currentMode === 'level' && currentLevelIndex === 4) unlockAchievement('grandmaster');
 
-            // Cek apakah semua tantangan selesai
             if (currentMode === 'challenge') {
                 const allChDone = CHALLENGES.every((ch, i) => getStoredHighScore('challenge', i) > 0);
                 if (allChDone) unlockAchievement('challenge_champion');
             }
 
-            // Render ke Modal
             finalTotalScore.textContent = finalScore.toLocaleString('id-ID');
             statBaseScore.textContent = currentScore.toLocaleString('id-ID');
             statTimeBonus.textContent = `+${timeBonus.toLocaleString('id-ID')}`;
@@ -1922,7 +1806,6 @@
             finalRemaining.textContent = timerSeconds < 999 ? `${timerSeconds}s` : 'Bebas';
             finalMoves.textContent = moves;
 
-            // Setup Tombol Berikutnya
             if (currentMode === 'level') {
                 if (currentLevelIndex < LEVELS.length - 1) {
                     modalNextBtn.textContent = `Lanjut Level ${currentLevelIndex + 2} ➔`;
@@ -1939,7 +1822,7 @@
                 }
                 modalRestartBtn.textContent = "Main Lagi Level Ini";
             } else {
-                modalNextBtn.textContent = "Pilih Tantangan Lain ➔";
+                modalNextBtn.textContent = "Tantangan Lain ➔";
                 modalNextBtn.onclick = () => {
                     winModal.classList.add('hidden');
                     currentChallengeIndex = (currentChallengeIndex + 1) % CHALLENGES.length;
@@ -1950,9 +1833,8 @@
                 modalRestartBtn.textContent = "Ulangi Tantangan Ini";
             }
 
-            // Handler Share Score
             shareScoreBtn.onclick = () => {
-                const text = `🧠 Skor Memory Match saya: ${finalScore.toLocaleString('id-ID')} poin ('${'⭐'.repeat(starCount)}')! Bisakah kamu mengalahkan rekor ini? Mainkan di: ${window.location.href}`;
+                const text = `🧠 Skor Memory Match saya: ${finalScore.toLocaleString('id-ID')} poin ('${'⭐'.repeat(starCount)}')! Coba kalahkan rekor saya di: ${window.location.href}`;
                 if (navigator.share) {
                     navigator.share({
                         title: 'Memory Match - Rekor Skor!',
@@ -1961,18 +1843,18 @@
                     }).catch(() => {});
                 } else if (navigator.clipboard) {
                     navigator.clipboard.writeText(text).then(() => {
-                        showPwaToast('📋 Skor disalin ke clipboard! Bagikan ke temanmu.');
+                        showPwaToast('📋 Skor disalin ke clipboard!');
                     });
                 }
             };
 
             setTimeout(() => {
                 winModal.classList.remove('hidden');
-            }, 300);
+            }, 250);
         }
 
         // ==========================================
-        // 16. KONDISI GAME OVER / KALAH
+        // 15. KONDISI KALAH (GAME OVER)
         // ==========================================
         function handleGameOver(reasonText) {
             isBoardLocked = true;
@@ -1986,18 +1868,18 @@
 
             setTimeout(() => {
                 loseModal.classList.remove('hidden');
-            }, 250);
+            }, 200);
         }
 
         // ==========================================
-        // 17. MODAL PAPAN REKOR (LEADERBOARD)
+        // 16. MODALS LOGIC
         // ==========================================
         function openLeaderboard() {
             leaderboardLevelsList.innerHTML = '';
             LEVELS.forEach((lvl, idx) => {
                 const best = getStoredHighScore('level', idx);
                 const row = document.createElement('div');
-                row.className = "flex justify-between items-center bg-slate-50 dark:bg-slate-800 p-2 rounded-lg border border-slate-200/70 dark:border-slate-700";
+                row.className = "flex justify-between items-center bg-slate-50 dark:bg-slate-800 p-2 rounded-lg border border-slate-200/70 dark:border-slate-700 text-xs";
                 row.innerHTML = `
                     <span class="font-medium text-slate-700 dark:text-slate-200">Level ${lvl.level} (${lvl.name})</span>
                     <span class="font-bold ${best > 0 ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400'}">${best > 0 ? best.toLocaleString('id-ID') : '-'}</span>
@@ -2009,7 +1891,7 @@
             CHALLENGES.forEach((ch, idx) => {
                 const best = getStoredHighScore('challenge', idx);
                 const row = document.createElement('div');
-                row.className = "flex justify-between items-center bg-amber-50/60 dark:bg-amber-950/40 p-2 rounded-lg border border-amber-200/70 dark:border-amber-800/50";
+                row.className = "flex justify-between items-center bg-amber-50/60 dark:bg-amber-950/40 p-2 rounded-lg border border-amber-200/70 dark:border-amber-800/50 text-xs";
                 row.innerHTML = `
                     <span class="font-medium text-slate-700 dark:text-slate-200">${ch.name}</span>
                     <span class="font-bold ${best > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400'}">${best > 0 ? best.toLocaleString('id-ID') : '-'}</span>
@@ -2024,9 +1906,6 @@
             leaderboardModal.classList.add('hidden');
         }
 
-        // ==========================================
-        // 18. MODAL PENCAPAIAN (ACHIEVEMENTS)
-        // ==========================================
         function openAchievements() {
             const unlocked = getUnlockedAchievements();
             achievementsList.innerHTML = '';
@@ -2034,18 +1913,18 @@
             MASTER_ACHIEVEMENTS.forEach(ach => {
                 const isDone = unlocked.includes(ach.id);
                 const item = document.createElement('div');
-                item.className = `p-2.5 rounded-xl border flex items-start gap-2.5 transition ${
+                item.className = `p-2 rounded-xl border flex items-start gap-2 text-xs transition ${
                     isDone 
                         ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800' 
                         : 'bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700 opacity-60'
                 }`;
                 item.innerHTML = `
-                    <div class="text-xl shrink-0 mt-0.5">${isDone ? '🏆' : '🔒'}</div>
+                    <div class="text-lg shrink-0">${isDone ? '🏆' : '🔒'}</div>
                     <div class="flex-1">
-                        <div class="font-extrabold ${isDone ? 'text-emerald-800 dark:text-emerald-300' : 'text-slate-700 dark:text-slate-300'}">
+                        <div class="font-extrabold text-[11px] sm:text-xs ${isDone ? 'text-emerald-800 dark:text-emerald-300' : 'text-slate-700 dark:text-slate-300'}">
                             ${ach.name}
                         </div>
-                        <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">${ach.desc}</div>
+                        <div class="text-[10px] text-slate-500 dark:text-slate-400">${ach.desc}</div>
                     </div>
                 `;
                 achievementsList.appendChild(item);
@@ -2058,9 +1937,6 @@
             achievementsModal.classList.add('hidden');
         }
 
-        // ==========================================
-        // 19. MODAL SKINS & THEMES
-        // ==========================================
         function openThemes() {
             document.querySelectorAll('.skin-opt-btn').forEach(btn => {
                 const skin = btn.dataset.skin;
@@ -2082,17 +1958,17 @@
                 currentCardSkin = btn.dataset.skin;
                 localStorage.setItem('mm_card_skin', currentCardSkin);
                 cards.forEach(c => {
-                    c.className = `card h-20 sm:h-24 cursor-pointer select-none ${currentCardSkin}` + 
+                    c.className = `card aspect-square cursor-pointer select-none ${currentCardSkin}` + 
                         (c.classList.contains('flipped') ? ' flipped' : '') +
                         (c.classList.contains('matched') ? ' matched' : '');
                 });
                 openThemes();
-                showPwaToast('🎨 Skin kartu berhasil diperbarui!');
+                showPwaToast('🎨 Skin kartu diperbarui!');
             });
         });
 
         // ==========================================
-        // 20. DARK MODE LOGIC
+        // 17. DARK MODE
         // ==========================================
         function initDarkMode() {
             const isDark = localStorage.getItem('mm_dark_mode') === 'true' ||
@@ -2111,11 +1987,11 @@
             const isDark = document.documentElement.classList.toggle('dark');
             localStorage.setItem('mm_dark_mode', isDark.toString());
             darkmodeToggleBtn.textContent = isDark ? '☀️' : '🌙';
-            showPwaToast(isDark ? '🌙 Mode Gelap Aktif' : '☀️ Mode Terang Aktif');
+            showPwaToast(isDark ? '🌙 Mode Gelap' : '☀️ Mode Terang');
         });
 
         // ==========================================
-        // 21. EVENT LISTENERS UTAMA
+        // 18. EVENT LISTENERS
         // ==========================================
         tabLevel.addEventListener('click', () => {
             if (currentMode !== 'level') {
@@ -2154,20 +2030,18 @@
         soundBtn.addEventListener('click', () => {
             soundEnabled = !soundEnabled;
             soundBtn.textContent = soundEnabled ? '🔊' : '🔇';
-            soundBtn.title = soundEnabled ? 'Suara Aktif' : 'Suara Dimatikan';
-            showPwaToast(soundEnabled ? '🔊 Efek suara aktif' : '🔇 Efek suara dimatikan');
+            showPwaToast(soundEnabled ? '🔊 Suara Aktif' : '🔇 Suara Dimatikan');
         });
 
         bgmBtn.addEventListener('click', () => {
             bgmEnabled = !bgmEnabled;
             bgmBtn.textContent = bgmEnabled ? '🎶' : '🎵';
-            bgmBtn.title = bgmEnabled ? 'BGM Aktif' : 'BGM Dimatikan';
             if (bgmEnabled) {
                 startBgm();
-                showPwaToast('🎶 Musik ambient santai diaktifkan');
+                showPwaToast('🎶 Musik BGM Aktif');
             } else {
                 stopBgm();
-                showPwaToast('🎵 Musik ambient dimatikan');
+                showPwaToast('🎵 Musik BGM Dimatikan');
             }
         });
 
@@ -2184,7 +2058,7 @@
         modalCloseThemesBtn.addEventListener('click', closeThemes);
 
         // ==========================================
-        // 22. FITUR PWA (PROGRESSIVE WEB APP)
+        // 19. FITUR PWA (PROGRESSIVE WEB APP)
         // ==========================================
         let deferredPrompt = null;
         let toastTimeout = null;
@@ -2211,7 +2085,7 @@
             clearTimeout(toastTimeout);
             toastTimeout = setTimeout(() => {
                 toast.classList.add('hidden');
-            }, 3800);
+            }, 3000);
         }
 
         function initPwaFeatures() {
@@ -2265,7 +2139,7 @@
                     deferredPrompt.prompt();
                     const { outcome } = await deferredPrompt.userChoice;
                     if (outcome === 'accepted') {
-                        showPwaToast('Terima kasih! Sedang memasang aplikasi...');
+                        showPwaToast('Sedang memasang aplikasi...');
                     }
                     deferredPrompt = null;
                     if (pwaInstallBtn) pwaInstallBtn.classList.add('hidden');
@@ -2273,7 +2147,7 @@
                 } else if (isIos) {
                     if (iosInstallModal) iosInstallModal.classList.remove('hidden');
                 } else {
-                    showPwaToast('Gunakan menu browser (titik tiga ⋮) lalu pilih "Instal Aplikasi"');
+                    showPwaToast('Buka menu browser (⋮) ➔ "Instal Aplikasi"');
                 }
             }
 
@@ -2304,28 +2178,26 @@
                     pwaStandaloneBadge.classList.remove('hidden');
                     pwaStandaloneBadge.classList.add('inline-flex');
                 }
-                showPwaToast('🎉 Memory Match berhasil dipasang! Mainkan kapan saja dari layar beranda.');
+                showPwaToast('🎉 Memory Match berhasil dipasang!');
             });
 
             function updateOnlineStatus() {
                 if (!connectionStatus) return;
                 if (navigator.onLine) {
-                    connectionStatus.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 transition-all';
-                    connectionStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span>Online</span>';
+                    connectionStatus.className = 'inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 transition-all';
+                    connectionStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span><span>Online</span>';
                 } else {
-                    connectionStatus.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 transition-all';
-                    connectionStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500"></span><span>Offline</span>';
-                    showPwaToast('📶 Anda sedang offline. Game tetap dapat dimainkan 100%!');
+                    connectionStatus.className = 'inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 transition-all';
+                    connectionStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>Offline</span>';
+                    showPwaToast('📶 Mode Offline Aktif');
                 }
             }
 
             window.addEventListener('online', () => {
                 updateOnlineStatus();
-                showPwaToast('🟢 Koneksi kembali online!');
+                showPwaToast('🟢 Kembali online!');
             });
-            window.addEventListener('offline', () => {
-                updateOnlineStatus();
-            });
+            window.addEventListener('offline', updateOnlineStatus);
             updateOnlineStatus();
 
             if ('serviceWorker' in navigator) {
@@ -2343,7 +2215,7 @@
                         });
                     })
                     .catch((err) => {
-                        console.warn('[PWA] Service Worker gagal:', err);
+                        console.warn('[PWA] SW error:', err);
                     });
 
                 let refreshing = false;
@@ -2357,12 +2229,11 @@
         }
 
         // ==========================================
-        // 23. INISIALISASI AWAL (LOAD)
+        // 20. INIT LOAD
         // ==========================================
         window.addEventListener('load', () => {
             initDarkMode();
 
-            // Cek URL params (?mode=level/challenge/custom)
             const urlParams = new URLSearchParams(window.location.search);
             const requestedMode = urlParams.get('mode');
             if (requestedMode === 'challenge') {
