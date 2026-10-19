@@ -1,18 +1,46 @@
-# 🧠 Memory Match - PWA Game
+# 🧠 Memory Match - PWA Game (Ultimate Edition)
 
-Game asah otak kartu memori interaktif dengan mode level berjenjang, tantangan waktu (*Time Rush*), sistem skor kombo, dan efek suara synthesizer dinamis. Siap dimainkan langsung di browser serta dapat dipasang sebagai **Progressive Web App (PWA)** di Desktop dan Mobile (Android & iOS) dengan dukungan offline penuh.
+Game asah otak kartu memori interaktif dengan mode level berjenjang, mode tantangan, mode kustom bebas (sandbox), power-ups, sistem pencapaian, kustomisasi skin kartu, musik latar sintetis prosedural, dan efek suara dinamis. Siap dimainkan langsung di browser serta dapat dipasang sebagai **Progressive Web App (PWA)** di Desktop dan Mobile (Android & iOS) dengan dukungan offline 100%.
 
 ---
 
-## ✨ Fitur Utama
+## ✨ Fitur-Fitur Menarik
 
-- 📱 **Progressive Web App (PWA)**: Dapat diinstal langsung di Android, iOS, Windows, macOS, dan Linux layaknya aplikasi native.
-- 📶 **100% Offline-Ready**: Didukung Service Worker pintar untuk meng-cache seluruh aset permainan sehingga tetap bisa dimainkan tanpa koneksi internet.
-- 🏆 **Mode Level**: 5 tingkat kesulitan dengan variasi jumlah kartu, tema gambar, batas langkah, dan target skor.
-- 🔥 **Mode Challenge**: Mode khusus seperti *Time Rush*, *Memory Master*, *One Mistake Limit*, dan *Blind Flip*.
-- 🎵 **Web Audio API**: Efek suara sintetis prosedural untuk flip kartu, kecocokan, combo, kemenangan, dan kekalahan tanpa file audio eksternal.
-- 📊 **Papan Rekor Lokal**: Catatan skor tertinggi dan statistik tersimpan otomatis di browser menggunakan LocalStorage.
-- 🎨 **Desain Modern & Responsif**: Animasi kartu 3D flip realistis, gradien dinamis, dan tampilan yang pas di semua ukuran layar smartphone maupun layar PC.
+### 🎮 Gameplay & Mode Permainan
+- 🏆 **Mode Level**: 5 tingkat kesulitan bertahap dari pemula hingga Grandmaster.
+- 🔥 **Mode Challenge**: Tantangan unik bertekanan tinggi (*Time Rush 15s*, *Flash Peek 3s*, *Batas Langkah*, dan *Penalti Waktu*).
+- 🎲 **Mode Bebas (Custom Sandbox)**: Bebas memilih ukuran kotak (2x3 hingga 4x5), 5 pilihan tema gambar, dan batas waktu santai/terbatas.
+- ⚡ **Booster & Power-Up System**:
+  - 👁️ **Intip (Peek)**: Membuka semua kartu selama 1.2 detik untuk menghafal posisi.
+  - 🪄 **Hint**: Menemukan dan memberikan tanda pada 1 pasang kartu yang cocok.
+  - ⏱️ **Bekukan Waktu (Freeze)**: Menghentikan hitungan mundur waktu selama 5 detik dengan efek beku.
+
+### 🎨 Visual & Personalisasi
+- 🌙 **Dark Mode & Light Mode**: Dukungan mode gelap (*OLED-friendly dark glassmorphism*) dan mode terang segar dengan transisi mulus.
+- 🎨 **Skin Kartu**: Pilihan gaya sampul kartu:
+  - 🔵 *Sapphire Neon* (Default)
+  - 🟣 *Cyberpunk Neon*
+  - 🟢 *Emerald Jade*
+  - 🟠 *Sunset Crimson*
+  - ⚫ *Obsidian Gold*
+- 🖼️ **5 Kategori Tema Emoji**: Kuliner (🍕), Luar Angkasa (🚀), Hewan Lucu (🐾), Video Game (🎮), dan Alam & Bunga (🌸).
+- 🎊 **Canvas Confetti Particle**: Letupan kembang api partikel konfeti saat menang dan kombo x3 ke atas.
+
+### 🎵 Audio & Haptic Sensor
+- 🎶 **Procedural Lofi Ambient BGM**: Musik latar relaksasi yang disintesis secara prosedural langsung via Web Audio API tanpa perlu mendownload file mp3 eksternal.
+- 🔊 **Efek Suara Sintetis Dinamis**: Suara flip, match (dengan nada kombo bertingkat), mismatch, penalti, menang, kalah, dan freeze.
+- 📳 **Haptic Feedback**: Getaran responsif saat kartu disentuh, cocok, salah, atau menang (pada perangkat smartphone yang mendukung).
+
+### 🏆 Retensi & Sosial
+- 🎖️ **Sistem Pencapaian (Achievements & Trofi)**: 7 medali unik untuk dibuka (*Langkah Pertama*, *Combo Master*, *Kilat Memori*, *Pikiran Tajam*, *Grandmaster*, *Penakluk Tantangan*, *Taktisi Cerdas*).
+- ⭐ **Rating Bintang (1 - 3 Stars)**: Penilaian performa akhir ronde berdasarkan akurasi dan sisa waktu.
+- 📤 **Fitur Bagikan Skor (Web Share API)**: Salin atau bagikan skor dan bintang ke WhatsApp/media sosial hanya dengan satu klik.
+- 📊 **Papan Rekor Lokal**: Skor tertinggi setiap mode tersimpan aman di LocalStorage.
+
+### 📱 Kemampuan PWA (Progressive Web App)
+- 📲 **Dapat Diinstal (Installable)**: Mendukung instalasi native di Android, iOS, Windows, macOS, dan Linux.
+- 📶 **100% Offline-Ready**: Dilengkapi Service Worker cerdas untuk meng-cache seluruh aplikasi.
+- 🍎 **Panduan Khusus iOS Safari**: Modal interaktif langkah demi langkah untuk pengguna iPhone/iPad.
 
 ---
 
@@ -20,21 +48,19 @@ Game asah otak kartu memori interaktif dengan mode level berjenjang, tantangan w
 
 ```
 .
-├── index.html          # Halaman utama game
-├── memory_match.html   # Berkas game mandiri
+├── index.html          # Halaman utama game (PWA ready)
+├── memory_match.html   # File game utama
 ├── manifest.json       # Konfigurasi PWA Web App Manifest
-├── sw.js               # Service Worker untuk caching offline & update
+├── sw.js               # Service Worker untuk caching offline & update otomatis
 ├── tailwind.cdn.js     # Pustaka Tailwind lokal untuk mode offline
-├── vercel.json         # Konfigurasi deployment & header PWA untuk Vercel
+├── vercel.json         # Konfigurasi deployment & header PWA optimal untuk Vercel
 ├── favicon.ico         # Favicon browser
-└── icons/              # Ikon PWA (16x16 hingga 512x512, maskable, & screenshot)
+└── icons/              # Ikon resolusi tinggi & screenshots (PWA compliant)
 ```
 
 ---
 
 ## 🛠️ Menjalankan Secara Lokal
-
-Untuk menjalankan game secara lokal:
 
 ```bash
 # Menggunakan Python
@@ -50,7 +76,6 @@ Buka `http://localhost:8080` di browser Anda.
 
 ## 🌐 Deploy ke Vercel
 
-Proyek ini telah dikonfigurasi dengan file `vercel.json` untuk header PWA yang optimal.
-1. Impor repository ini di [vercel.com](https://vercel.com).
-2. Klik **Deploy**.
-3. Akses URL HTTPS yang dihasilkan di perangkat mobile atau desktop Anda untuk langsung menginstalnya!
+1. Buka [vercel.com](https://vercel.com) dan impor repository ini.
+2. Klik **Deploy** (langsung selesai dalam hitungan detik tanpa build step).
+3. Buka tautan HTTPS yang dihasilkan di smartphone atau desktop untuk menginstal game ini!

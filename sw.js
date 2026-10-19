@@ -1,5 +1,5 @@
 // Service Worker for Memory Match PWA
-const CACHE_NAME = 'memory-match-pwa-v1.0.0';
+const CACHE_NAME = 'memory-match-pwa-v1.1.0';
 
 const PRECACHE_ASSETS = [
   './',
